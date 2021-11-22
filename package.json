@@ -1,0 +1,26 @@
+{
+  "name": "electron-learn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron src/main/index.js",
+    "dev": "cd src/renderer && vite",
+    "build": "cd src/renderer && vue-tsc --noEmit && vite build",
+    "serve": "cd src/renderer &&vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vue": "^3.2.16",
+    "electron": "^15.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.9.3",
+    "typescript": "^4.4.3",
+    "vite": "^2.6.4",
+    "vue-tsc": "^0.3.0"
+  }
+}
