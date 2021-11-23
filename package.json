@@ -14,8 +14,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.24.0",
+    "electron": "^15.1.0",
+    "pinia": "^2.0.4",
     "vue": "^3.2.16",
-    "electron": "^15.1.0"
+    "vue-router": "^4.0.12"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.9.3",

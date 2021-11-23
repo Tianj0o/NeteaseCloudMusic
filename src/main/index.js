@@ -2,8 +2,8 @@ const { app, BrowserWindow } = require('electron')
 let win = null;
 app.on("ready", () => {
   win = new BrowserWindow({
-    width: 1200,
-    height: 1000,
+    width: 1050,
+    height: 650,
     // frame: false,
     // titleBarStyle: 'hidden',
     titleBarOverlay: {
@@ -15,6 +15,6 @@ app.on("ready", () => {
       contextIsolation: false,
     },
   });
-  win.loadFile('../renderer/dist/index.html')
-  // win.loadURL("http://localhost:3000/");
+  // win.loadFile('../renderer/dist/index.html')
+  win.loadURL("http://localhost:3000/");
 });
