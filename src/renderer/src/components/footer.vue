@@ -13,7 +13,12 @@ import musicPlayer from './musicPlayer.vue'
         <div class="author">Julien Marchal</div>
       </div>
     </div>
-    <musicPlayer></musicPlayer>
+    <div class="music-player">
+      <musicPlayer></musicPlayer>
+    </div>
+    <div class="music-list" style="color: whitesmoke;">
+      <i class="icon iconfont icon-cibiaoquanyi"></i>
+    </div>
   </div>
 </template>
 
@@ -23,12 +28,15 @@ import musicPlayer from './musicPlayer.vue'
   align-items: center;
   padding: 0px 10px;
   height: 100%;
+
   .music-info {
     display: flex;
     color: whitesmoke;
     padding: 0 10px;
     height: 100%;
     align-items: center;
+    // width: 25%;
+    flex: 1;
     .music-image {
       height: 80%;
     }
@@ -38,6 +46,12 @@ import musicPlayer from './musicPlayer.vue'
     .author {
       font-size: 0.8rem;
     }
+  }
+  .music-player {
+    flex: 2;
+  }
+  .music-list {
+    flex: 1;
   }
 }
 </style>
