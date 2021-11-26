@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import footerVue from '@/components/footer.vue';
+import navHeader from '@/components/navHeader.vue';
 </script>
 
 <template>
   <div class="main">
-    <div class="header">header</div>
+    <div class="header">
+      <nav-header></nav-header>
+    </div>
     <div class="container">
       <div class="menu">menu</div>
       <div class="body">body</div>
@@ -21,20 +24,21 @@ import footerVue from '@/components/footer.vue';
   flex-direction: column;
   height: 100vh;
   overflow-y: hidden;
+  overflow-x: hidden;
   .header {
-    width: 100%;
+    max-width: 100%;
     height: 60px;
-    background-color: antiquewhite;
+    background-color: rgb(32, 32, 35);
   }
   .container {
     display: flex;
     flex: 1;
     .menu {
-      flex: 1;
+      width: 200px;
       background-color: blueviolet;
     }
     .body {
-      flex: 4;
+      flex: 1;
       background-color: crimson;
     }
   }
