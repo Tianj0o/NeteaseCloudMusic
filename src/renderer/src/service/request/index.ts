@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { BASE_URL, TIME_OUT } from "./config";
 
 class TRequest {
@@ -6,6 +6,9 @@ class TRequest {
 
   constructor(config: AxiosRequestConfig) {
     this.instance = axios.create(config);
+    this.instance.interceptors.response.use((res: AxiosResponse) => {
+      return res.data;
+    });
   }
   request(config: AxiosRequestConfig) {
     return new Promise((resolve, reject) => {
@@ -26,7 +29,5 @@ class TRequest {
     return this.request({ ...config, method: "POST" });
   }
 }
-export const request = new TRequest({
-  baseURL: BASE_URL,
-  timeout: TIME_OUT,
-});
+
+export default TRequest;

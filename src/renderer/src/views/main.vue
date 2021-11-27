@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import footerVue from '@/components/footer.vue';
+import footerVue from '@/components/musicFooter.vue';
 import navHeader from '@/components/navHeader.vue';
 </script>
 
