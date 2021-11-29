@@ -3,7 +3,7 @@ import { mainStore } from '@/store';
 import type { musicInfo } from '@/store/type';
 import { reactive, ref } from '@vue/reactivity';
 import { nextTick, watch } from '@vue/runtime-core';
-
+import { formateTimeToString } from '@/hooks/formatTime'
 const props = defineProps<{
   currentMusic: musicInfo
 }>()
@@ -32,8 +32,12 @@ const handleChangeSong = (type: string) => {
   store.changCurrentMusic(type)
   nextTick(() => audioRef.value?.play()) // 使用nextTick()
 }
+
+const progressLineRef = ref<HTMLElement>()
 const handleMusicPlaying = (e: any) => {
   musciState.currentTime = audioRef.value?.currentTime
+  if (progressLineRef.value && audioRef.value && musciState.currentTime)
+    progressLineRef.value.style.width = musciState.currentTime / audioRef.value?.duration * 350 + 'px'
 }
 </script>
 
@@ -61,12 +65,21 @@ const handleMusicPlaying = (e: any) => {
         <i class="icon iconfont icon-cibiaoquanyi"></i>
       </div>
     </div>
-    <div class="Song-progress">
-      -----------{{ `${musciState.currentTime ? parseInt((musciState.currentTime) / 60 + '') : ''}:${musciState.currentTime ? (musciState.currentTime % 60).toFixed(0) : ''}` }}--------
-      {{ `${audioRef?.duration ? parseInt((audioRef?.duration) / 60 + '') : ''}:${audioRef?.duration ? (audioRef?.duration % 60).toFixed(0) : ''}` }}
+    <div class="song-progress">
+      <div class="currentTime">{{ formateTimeToString(musciState.currentTime ?? 0) }}</div>
+      <div class="progress-bar">
+        <div ref="progressLineRef" class="progress-line"></div>
+        <div class="point"></div>
+      </div>
+      <div class="duration">{{ formateTimeToString(store.currentMusic.songTime ?? 0) }}</div>
     </div>
   </div>
-  <audio ref="audioRef" @timeupdate="handleMusicPlaying" :src="currentMusic.songUrl"></audio>
+  <audio
+    preload="metadata"
+    ref="audioRef"
+    @timeupdate="handleMusicPlaying"
+    :src="currentMusic.songUrl"
+  ></audio>
 </template>
 
 <style scoped lang="less">
@@ -81,6 +94,40 @@ const handleMusicPlaying = (e: any) => {
     display: flex;
     justify-content: space-around;
     align-items: center;
+  }
+  .song-progress {
+    display: flex;
+    align-items: center;
+    .progress-bar {
+      height: 4px;
+      width: 350px;
+      margin: 0 9px;
+      border-radius: 4px;
+      background-color: grey;
+      .progress-line {
+        height: 4px;
+        border-radius: 4px;
+
+        width: 0px;
+        background-color: rgb(236, 65, 65);
+      }
+      // .point {
+      //   z-index: 2;
+      //   height: 2px;
+      //   width: 10px;
+      //   color: rgb(236, 65, 65);
+      // }
+      .progress-bar:hover .point {
+        height: 6px;
+        width: 6px;
+        color: rgb(236, 65, 65);
+      }
+    }
+
+    .currentTime,
+    .duration {
+      font-size: 0.7rem;
+    }
   }
 }
 </style>

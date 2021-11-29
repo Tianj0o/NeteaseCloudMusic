@@ -24,7 +24,7 @@ const handleQueryClick = () => {
     }).then((res: any) => {
       queryReslutLists.value = res.result.songs
       const id = queryReslutLists.value[0].id // 获取歌曲id
-      const duration = res.result.songs[0].dt // 歌曲时长 duration
+      const duration = Number(String(res.result.songs[0].dt).slice(0, String(res.result.songs[0].dt).length - 3)) // 歌曲时长 duration 三位
       request.get({
         url: `/song/url?id=${id}`
       }).then((res: any) => {
