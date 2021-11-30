@@ -34,10 +34,16 @@ const handleChangeSong = (type: string) => {
 }
 
 const progressLineRef = ref<HTMLElement>()
-const handleMusicPlaying = (e: any) => {
+const pointLeft = ref('0px')
+const handleMusicPlaying = () => {
   musciState.currentTime = audioRef.value?.currentTime
-  if (progressLineRef.value && audioRef.value && musciState.currentTime)
+  if (progressLineRef.value && audioRef.value && musciState.currentTime) {
     progressLineRef.value.style.width = musciState.currentTime / audioRef.value?.duration * 350 + 'px'
+    pointLeft.value = musciState.currentTime / audioRef.value?.duration * 350 + 'px'
+  }
+}
+const handleMusicEnded = () => {
+  store.changCurrentMusic('next')
 }
 </script>
 
@@ -69,7 +75,7 @@ const handleMusicPlaying = (e: any) => {
       <div class="currentTime">{{ formateTimeToString(musciState.currentTime ?? 0) }}</div>
       <div class="progress-bar">
         <div ref="progressLineRef" class="progress-line"></div>
-        <div class="point"></div>
+        <div class="point" :style="{ left: pointLeft }"></div>
       </div>
       <div class="duration">{{ formateTimeToString(store.currentMusic.songTime ?? 0) }}</div>
     </div>
@@ -78,6 +84,7 @@ const handleMusicPlaying = (e: any) => {
     preload="metadata"
     ref="audioRef"
     @timeupdate="handleMusicPlaying"
+    @ended="handleMusicEnded"
     :src="currentMusic.songUrl"
   ></audio>
 </template>
@@ -99,11 +106,14 @@ const handleMusicPlaying = (e: any) => {
     display: flex;
     align-items: center;
     .progress-bar {
+      position: relative;
       height: 4px;
       width: 350px;
       margin: 0 9px;
       border-radius: 4px;
       background-color: grey;
+      display: flex;
+      align-items: center;
       .progress-line {
         height: 4px;
         border-radius: 4px;
@@ -111,16 +121,14 @@ const handleMusicPlaying = (e: any) => {
         width: 0px;
         background-color: rgb(236, 65, 65);
       }
-      // .point {
-      //   z-index: 2;
-      //   height: 2px;
-      //   width: 10px;
-      //   color: rgb(236, 65, 65);
-      // }
-      .progress-bar:hover .point {
-        height: 6px;
-        width: 6px;
-        color: rgb(236, 65, 65);
+      &:hover .point {
+        height: 8px;
+        width: 8px;
+        border-radius: 50%;
+        background-color: rgb(236, 65, 65);
+        position: absolute;
+        transform: translateX(-4px);
+        left: 0px;
       }
     }
 
