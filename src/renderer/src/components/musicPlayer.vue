@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { mainStore } from '@/store';
+import { mainStore, musicMode } from '@/store';
 import type { musicInfo } from '@/store/type';
 import { reactive, ref } from '@vue/reactivity';
-import { nextTick, watch } from '@vue/runtime-core';
+import { nextTick } from '@vue/runtime-core';
 import { formateTimeToString } from '@/hooks/formatTime'
-const props = defineProps<{
+defineProps<{
   currentMusic: musicInfo
 }>()
 const audioRef = ref<HTMLAudioElement>()
@@ -14,10 +14,7 @@ const musciState = reactive({
   currentTime: audioRef.value?.currentTime,
   isPlay: false
 })
-watch(() => audioRef.value?.currentTime, () => {
-  console.log('+++')
-  console.log(musciState)
-})
+
 const handleControlClick = () => {
   musciState.isPlay = !musciState.isPlay
   if (musciState.isPlay) {
@@ -27,12 +24,7 @@ const handleControlClick = () => {
   }
 }
 const store = mainStore()
-const handleChangeSong = (type: string) => {
-  // audioRef.value?.pause()
-  store.changCurrentMusic(type)
-  nextTick(() => audioRef.value?.play()) // 使用nextTick()
-}
-
+const progressBarRef = ref<HTMLElement>()
 const progressLineRef = ref<HTMLElement>()
 const pointLeft = ref('0px')
 const handleMusicPlaying = () => {
@@ -42,16 +34,79 @@ const handleMusicPlaying = () => {
     pointLeft.value = musciState.currentTime / audioRef.value?.duration * 350 + 'px'
   }
 }
-const handleMusicEnded = () => {
-  store.changCurrentMusic('next')
+const playMode = ref<musicMode>(musicMode.SHUNXUBOFANG)
+const modeList: musicMode[] = [musicMode.SHUNXUBOFANG, musicMode.LIEBIAOXUNHUAN, musicMode.DANQUXUNHUAN, musicMode.SUIJIBOFANG]
+let modeIndex = 0
+// 切换音乐模式
+const changeMode = () => {
+  modeIndex = modeIndex === modeList.length - 1 ? 0 : modeIndex + 1
+  playMode.value = modeList[modeIndex]
 }
+// 切换音乐
+const handleChangeSong = (type: string) => {
+  if (audioRef.value) {
+    store.changManalContro(type, playMode.value)
+    nextTick(() => audioRef.value?.play())
+    musciState.isPlay = true
+  }
+}
+//当音乐停止
+const handleMusicEnded = () => {
+  if (audioRef.value) {
+    const isSTop = store.changAutoControl('next', playMode.value)
+    if (isSTop) {
+      musciState.isPlay = false
+    } else {
+      nextTick(() => audioRef.value?.play())
+    }
+  }
+}
+const isControl = ref(false)
+//鼠标按下控制条
+const handleMouseDown = () => {
+  //添加事件
+  document.addEventListener('mousemove', handleMouseMove)
+  document.addEventListener('mouseup', handleMouseUp)
+  isControl.value = true
+}
+
+
+//鼠标拖动控制条移动
+const handleMouseMove = (e: MouseEvent) => {
+  e.preventDefault()
+  if (!isControl.value) return
+  if (isControl.value && progressLineRef.value && audioRef.value) {
+    progressLineRef.value.style.width = (e.clientX - progressBarRef.value!.offsetLeft) + 'px'
+    pointLeft.value = (e.clientX - progressBarRef.value!.offsetLeft) + 'px'
+    nextTick(() => {
+      if (audioRef.value && audioRef.value.currentTime) {
+        audioRef.value.pause()
+        audioRef.value.currentTime = (e.clientX - progressBarRef.value!.offsetLeft) / 350 * audioRef.value?.duration
+      }
+    })
+  }
+}
+//鼠标放开
+const handleMouseUp = (e: MouseEvent) => {
+  e.preventDefault()
+  if (isControl.value && audioRef.value) {
+    audioRef.value.play()
+    musciState.isPlay = true
+  }
+  isControl.value = false
+  //取消事件
+  document.removeEventListener('mousemove', handleMouseMove)
+  document.removeEventListener('mouseup', handleMouseUp)
+}
+
 </script>
 
 <template>
-  <div class="music-player">
+  <div style="height: 100%;" class="music-player">
     <div class="music-control">
-      <div class="change-mode">
+      <div class="change-mode" @click="changeMode">
         <i class="icon iconfont icon-shezhi"></i>
+        {{ playMode }}
       </div>
       <div class="previous" @click="handleChangeSong('previous')">
         <i class="icon iconfont icon-arrow-double-left"></i>
@@ -73,9 +128,9 @@ const handleMusicEnded = () => {
     </div>
     <div class="song-progress">
       <div class="currentTime">{{ formateTimeToString(musciState.currentTime ?? 0) }}</div>
-      <div class="progress-bar">
+      <div class="progress-bar" ref="progressBarRef">
         <div ref="progressLineRef" class="progress-line"></div>
-        <div class="point" :style="{ left: pointLeft }"></div>
+        <div @mousedown="handleMouseDown" class="point" :style="{ left: pointLeft }"></div>
       </div>
       <div class="duration">{{ formateTimeToString(store.currentMusic.songTime ?? 0) }}</div>
     </div>
