@@ -2,6 +2,12 @@ import { createPinia } from "pinia";
 import { defineStore } from "pinia";
 import { musicInfo } from "./type";
 const pinia = createPinia();
+export enum musicMode {
+  SHUNXUBOFANG = "顺序播放",
+  LIEBIAOXUNHUAN = "列表循环",
+  DANQUXUNHUAN = "单曲循环",
+  SUIJIBOFANG = "随机播放",
+}
 export const mainStore = defineStore("main", {
   state: () => {
     return {
@@ -18,21 +24,55 @@ export const mainStore = defineStore("main", {
       this.currentMusic = this.musicLists[0] ?? {};
       this.currentIndex = 0;
     },
-    changCurrentMusic(type: string) {
-      if (type === "previous") {
-        if (this.currentIndex === 0) {
-          this.currentIndex = this.musicLists.length - 1;
-        } else if (this.currentIndex) {
-          this.currentIndex--;
+    changeToPrevious() {
+      if (this.currentIndex === 0) {
+        this.currentIndex = this.musicLists.length - 1;
+      } else {
+        this.currentIndex--;
+      }
+      this.currentMusic = this.musicLists[this.currentIndex];
+    },
+    changeToNext() {
+      if (this.currentIndex === this.musicLists.length - 1) {
+        this.currentIndex = 0;
+      } else {
+        this.currentIndex++;
+      }
+      this.currentMusic = this.musicLists[this.currentIndex];
+    },
+    changToRandom() {
+      const random = Math.floor(this.musicLists.length * Math.random());
+      this.currentIndex = random;
+      this.currentMusic = this.musicLists[this.currentIndex];
+    },
+    changAutoControl(type: string, mode: musicMode) {
+      switch (mode) {
+        case musicMode.DANQUXUNHUAN:
+          this.currentMusic = this.currentMusic;
+          break;
+        case musicMode.LIEBIAOXUNHUAN:
+          this.changeToNext();
+          break;
+        case musicMode.SHUNXUBOFANG:
+          if (this.currentIndex < this.musicLists.length - 1) {
+            this.changeToNext();
+          } else {
+            return true;
+          }
+        case musicMode.SUIJIBOFANG:
+          this.changToRandom();
+          break;
+      }
+    },
+    changManalContro(type: string, mode: musicMode) {
+      if (mode === musicMode.SUIJIBOFANG) {
+        this.changToRandom();
+      } else {
+        if (type === "next") {
+          this.changeToNext();
+        } else if (type == "previous") {
+          this.changeToPrevious();
         }
-        this.currentMusic = this.musicLists[this.currentIndex];
-      } else if (type === "next") {
-        if (this.currentIndex < this.musicLists.length - 1) {
-          this.currentIndex++;
-        } else if (this.currentIndex === this.musicLists.length - 1) {
-          this.currentIndex = 0;
-        }
-        this.currentMusic = this.musicLists[this.currentIndex];
       }
     },
   },
