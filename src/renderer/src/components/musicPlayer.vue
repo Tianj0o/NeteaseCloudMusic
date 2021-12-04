@@ -36,11 +36,19 @@ const handleMusicPlaying = () => {
 }
 const playMode = ref<musicMode>(musicMode.SHUNXUBOFANG)
 const modeList: musicMode[] = [musicMode.SHUNXUBOFANG, musicMode.LIEBIAOXUNHUAN, musicMode.DANQUXUNHUAN, musicMode.SUIJIBOFANG]
+const modeIcons: string[] = ['icon-shunxubofang', 'icon-liebiaoxunhuan', 'icon-danquxunhuan', 'icon-bofang-suijibofang']
+const playIcon = ref<string>('icon-shunxubofang')
+const ishowTitle = ref(false)
 let modeIndex = 0
 // 切换音乐模式
 const changeMode = () => {
   modeIndex = modeIndex === modeList.length - 1 ? 0 : modeIndex + 1
   playMode.value = modeList[modeIndex]
+  playIcon.value = modeIcons[modeIndex]
+  ishowTitle.value = true;
+  setTimeout(() => {
+    ishowTitle.value = false;
+  }, 500)
 }
 // 切换音乐
 const handleChangeSong = (type: string) => {
@@ -105,8 +113,10 @@ const handleMouseUp = (e: MouseEvent) => {
   <div style="height: 100%;" class="music-player">
     <div class="music-control">
       <div class="change-mode" @click="changeMode">
-        <i class="icon iconfont icon-shezhi"></i>
-        {{ playMode }}
+        <transition name="mode-pop">
+          <div class="mode-pop" style="user-select: none;" v-if="ishowTitle">{{ playMode }}</div>
+        </transition>
+        <i class="icon iconfont" :class="playIcon" :title="playMode"></i>
       </div>
       <div class="previous" @click="handleChangeSong('previous')">
         <i class="icon iconfont icon-arrow-double-left"></i>
@@ -156,6 +166,31 @@ const handleMouseUp = (e: MouseEvent) => {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    .change-mode {
+      position: relative;
+      .mode-pop {
+        position: absolute;
+        font-size: small;
+        background-color: rgb(35, 35, 35);
+        opacity: 0.8;
+        width: 80px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        border-radius: 30px;
+        top: -30px;
+        left: -40px;
+        padding: 0 10px;
+      }
+      .mode-pop-enter-active,
+      .mode-pop-leave-active {
+        transition: opacity 0.5s ease-in;
+      }
+      .mode-pop-enter-from,
+      .mode-pop-leave-to {
+        opacity: 0;
+      }
+    }
   }
   .song-progress {
     display: flex;

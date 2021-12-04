@@ -10,7 +10,7 @@ import navHeader from '@/components/navHeader.vue';
     </div>
     <div class="container">
       <div class="menu">menu</div>
-      <div class="body">body</div>
+      <div class="body" id="container-body">body</div>
     </div>
     <div class="footer">
       <footer-vue></footer-vue>
@@ -40,6 +40,7 @@ import navHeader from '@/components/navHeader.vue';
     .body {
       flex: 1;
       background-color: crimson;
+      position: relative;
     }
   }
   .footer {
