@@ -3,22 +3,42 @@ import musicPlayer from './musicPlayer.vue'
 import { mainStore } from '@/store';
 import { computed, ref } from '@vue/reactivity';
 import dialogTelport from './dialogTelport.vue';
-import { StyleValue } from '@vue/runtime-dom';
 import { formateTimeToString } from '@/hooks/formatTime'
+import useStorage from '@/hooks/useStorage';
+import { nextTick } from '@vue/runtime-core';
 const store = mainStore()
 let currentMusic = computed(() => store.currentMusic)
 
 const isShow = ref(false)
 const handleMusicListClick = () => {
-  console.log(1)
   isShow.value = !isShow.value
 }
-const playListStyle: StyleValue = {
-  height: "100%",
-  backgroundColor: 'rgb(54, 54, 54)',
-  width: "425px",
-  position: 'absolute',
-  right: 0
+const musicLists = computed(() => {
+  const musicLists = store.musicLists
+  const { setStorage } = useStorage()
+  setStorage('musicLists', musicLists)
+  return musicLists
+})
+let tick = 0;
+const musicPlayerRef = ref<InstanceType<typeof musicPlayer>>()
+const musicListItemClick = (index: number) => {
+  tick++
+  setTimeout(() => {
+    if (tick >= 2) {
+      console.log('shuangji')
+      store.changToindex(index);
+      nextTick(() => {
+        (musicPlayerRef.value as any).audioRef.play();
+        (musicPlayerRef.value as any).musicState.isPlay = true
+      })
+    }
+    tick = 0
+  }, 700)
+}
+const handleClearList = () => {
+  const { deleteStorage } = useStorage()
+  store.clearMusicLists()
+  deleteStorage('musicLists')
 }
 </script>
 <template>
@@ -28,12 +48,12 @@ const playListStyle: StyleValue = {
         <img :src="currentMusic?.picUrl" />
       </div>
       <div class="song-info">
-        <div class="music-name">{{ currentMusic.songName }}</div>
-        <div class="author">{{ currentMusic.songAuthor }}</div>
+        <div class="music-name">{{ currentMusic?.songName }}</div>
+        <div class="author">{{ currentMusic?.songAuthor }}</div>
       </div>
     </div>
     <div class="music-player">
-      <musicPlayer :currentMusic="currentMusic"></musicPlayer>
+      <musicPlayer ref="musicPlayerRef" :currentMusic="currentMusic"></musicPlayer>
     </div>
     <div class="music-lists">
       <div class="music-list" @click="handleMusicListClick">
@@ -42,11 +62,18 @@ const playListStyle: StyleValue = {
           <div class="playList">
             <div class="header">
               <div class="title">当前播放</div>
-              <div class="count">总{{ store.musicLists.length }}首</div>
+              <div style="display: flex;justify-content: space-between;">
+                <span class="count">总{{ musicLists.length }}首</span>
+                <span class="clearBtn" @click="handleClearList">清空列表</span>
+              </div>
             </div>
             <div class="lists">
-              <template v-for="(musicInfo,index) in store.musicLists">
-                <div class="list" :class="index % 2 === 0 ? '' : 'special'">
+              <template v-for="(musicInfo,index) in musicLists">
+                <div
+                  @click="musicListItemClick(index)"
+                  class="list"
+                  :class="index % 2 === 0 ? '' : 'special'"
+                >
                   <div class="songName">{{ musicInfo.songName }}</div>
                   <div class="songAuther">{{ musicInfo.songAuthor }}</div>
                   <div class="songDra">{{ formateTimeToString(musicInfo.songTime) }}</div>
@@ -130,6 +157,9 @@ const playListStyle: StyleValue = {
       font-size: 13px;
       opacity: 0.7;
     }
+    .clearBtn {
+      text-align: end;
+    }
   }
   .lists {
     overflow-y: scroll;
@@ -149,14 +179,20 @@ const playListStyle: StyleValue = {
       }
       .songName {
         width: 178px;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
       .songAuther {
         max-width: 95px;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
       .songDra {
         opacity: 0.7;
         flex: 1;
         text-align: end;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
     .list.special {

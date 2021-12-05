@@ -4,20 +4,21 @@ import type { musicInfo } from '@/store/type';
 import { reactive, ref } from '@vue/reactivity';
 import { nextTick } from '@vue/runtime-core';
 import { formateTimeToString } from '@/hooks/formatTime'
-defineProps<{
+const props = defineProps<{
   currentMusic: musicInfo
 }>()
+
 const audioRef = ref<HTMLAudioElement>()
 
-const musciState = reactive({
+const musicState = reactive({
   duration: audioRef.value?.duration ?? 0,
   currentTime: audioRef.value?.currentTime,
   isPlay: false
 })
 
 const handleControlClick = () => {
-  musciState.isPlay = !musciState.isPlay
-  if (musciState.isPlay) {
+  musicState.isPlay = !musicState.isPlay
+  if (musicState.isPlay) {
     audioRef.value?.play()
   } else {
     audioRef.value?.pause()
@@ -28,10 +29,10 @@ const progressBarRef = ref<HTMLElement>()
 const progressLineRef = ref<HTMLElement>()
 const pointLeft = ref('0px')
 const handleMusicPlaying = () => {
-  musciState.currentTime = audioRef.value?.currentTime
-  if (progressLineRef.value && audioRef.value && musciState.currentTime) {
-    progressLineRef.value.style.width = musciState.currentTime / audioRef.value?.duration * 350 + 'px'
-    pointLeft.value = musciState.currentTime / audioRef.value?.duration * 350 + 'px'
+  musicState.currentTime = audioRef.value?.currentTime
+  if (progressLineRef.value && audioRef.value && musicState.currentTime) {
+    progressLineRef.value.style.width = musicState.currentTime / audioRef.value?.duration * 350 + 'px'
+    pointLeft.value = musicState.currentTime / audioRef.value?.duration * 350 + 'px'
   }
 }
 const playMode = ref<musicMode>(musicMode.SHUNXUBOFANG)
@@ -55,7 +56,7 @@ const handleChangeSong = (type: string) => {
   if (audioRef.value) {
     store.changManalContro(type, playMode.value)
     nextTick(() => audioRef.value?.play())
-    musciState.isPlay = true
+    musicState.isPlay = true
   }
 }
 //当音乐停止
@@ -63,7 +64,7 @@ const handleMusicEnded = () => {
   if (audioRef.value) {
     const isSTop = store.changAutoControl('next', playMode.value)
     if (isSTop) {
-      musciState.isPlay = false
+      musicState.isPlay = false
     } else {
       nextTick(() => audioRef.value?.play())
     }
@@ -99,58 +100,91 @@ const handleMouseUp = (e: MouseEvent) => {
   e.preventDefault()
   if (isControl.value && audioRef.value) {
     audioRef.value.play()
-    musciState.isPlay = true
+    musicState.isPlay = true
   }
   isControl.value = false
   //取消事件
   document.removeEventListener('mousemove', handleMouseMove)
   document.removeEventListener('mouseup', handleMouseUp)
 }
-
+defineExpose({
+  audioRef,
+  musicState
+})
 </script>
 
 <template>
   <div style="height: 100%;" class="music-player">
-    <div class="music-control">
-      <div class="change-mode" @click="changeMode">
-        <transition name="mode-pop">
+    <template v-if="currentMusic">
+      <div class="music-control">
+        <div class="change-mode" @click="changeMode">
+          <transition name="mode-pop">
+            <div class="mode-pop" style="user-select: none;" v-if="ishowTitle">{{ playMode }}</div>
+          </transition>
+          <i class="icon iconfont" :class="playIcon" :title="playMode"></i>
+        </div>
+        <div class="previous" @click="handleChangeSong('previous')">
+          <i class="icon iconfont icon-arrow-double-left"></i>
+        </div>
+        <div class="control" @click="handleControlClick">
+          <i v-if="!musicState.isPlay" style="font-size: 2rem;" class="icon iconfont icon-bofang"></i>
+          <i
+            v-else-if="musicState.isPlay"
+            style="font-size: 2rem;"
+            class="icon iconfont icon-zanting"
+          ></i>
+        </div>
+        <div class="next" @click="handleChangeSong('next')">
+          <i class="icon iconfont icon-arrow-double-right"></i>
+        </div>
+        <div class="lyrics">
+          <i class="icon iconfont icon-cibiaoquanyi"></i>
+        </div>
+      </div>
+      <div class="song-progress">
+        <div class="currentTime">{{ formateTimeToString(musicState.currentTime ?? 0) }}</div>
+        <div class="progress-bar" ref="progressBarRef">
+          <div ref="progressLineRef" class="progress-line"></div>
+          <div @mousedown="handleMouseDown" class="point" :style="{ left: pointLeft }"></div>
+        </div>
+        <div class="duration">{{ formateTimeToString(store.currentMusic?.songTime ?? 0) }}</div>
+      </div>
+    </template>
+    <template v-else>
+      <div class="music-control" style="opacity: 0.5;">
+        <div class="change-mode">
           <div class="mode-pop" style="user-select: none;" v-if="ishowTitle">{{ playMode }}</div>
-        </transition>
-        <i class="icon iconfont" :class="playIcon" :title="playMode"></i>
+          <i class="icon iconfont" :class="playIcon" :title="playMode"></i>
+        </div>
+        <div class="previous">
+          <i class="icon iconfont icon-arrow-double-left"></i>
+        </div>
+        <div class="control">
+          <i style="font-size: 2rem;" class="icon iconfont icon-bofang"></i>
+        </div>
+        <div class="next">
+          <i class="icon iconfont icon-arrow-double-right"></i>
+        </div>
+        <div class="lyrics">
+          <i class="icon iconfont icon-cibiaoquanyi"></i>
+        </div>
       </div>
-      <div class="previous" @click="handleChangeSong('previous')">
-        <i class="icon iconfont icon-arrow-double-left"></i>
+      <div class="song-progress" style="height: 13px;">
+        <div class="currentTime"></div>
+        <div class="progress-bar">
+          <div class="progress-line"></div>
+          <div class="point"></div>
+        </div>
+        <div class="duration"></div>
       </div>
-      <div class="control" @click="handleControlClick">
-        <i v-if="!musciState.isPlay" style="font-size: 2rem;" class="icon iconfont icon-bofang"></i>
-        <i
-          v-else-if="musciState.isPlay"
-          style="font-size: 2rem;"
-          class="icon iconfont icon-zanting"
-        ></i>
-      </div>
-      <div class="next" @click="handleChangeSong('next')">
-        <i class="icon iconfont icon-arrow-double-right"></i>
-      </div>
-      <div class="lyrics">
-        <i class="icon iconfont icon-cibiaoquanyi"></i>
-      </div>
-    </div>
-    <div class="song-progress">
-      <div class="currentTime">{{ formateTimeToString(musciState.currentTime ?? 0) }}</div>
-      <div class="progress-bar" ref="progressBarRef">
-        <div ref="progressLineRef" class="progress-line"></div>
-        <div @mousedown="handleMouseDown" class="point" :style="{ left: pointLeft }"></div>
-      </div>
-      <div class="duration">{{ formateTimeToString(store.currentMusic.songTime ?? 0) }}</div>
-    </div>
+    </template>
   </div>
   <audio
     preload="metadata"
     ref="audioRef"
     @timeupdate="handleMusicPlaying"
     @ended="handleMusicEnded"
-    :src="currentMusic.songUrl"
+    :src="currentMusic?.songUrl"
   ></audio>
 </template>
 
@@ -227,5 +261,8 @@ const handleMouseUp = (e: MouseEvent) => {
       font-size: 0.7rem;
     }
   }
+}
+.default {
+  opacity: 0.5;
 }
 </style>

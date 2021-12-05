@@ -1,3 +1,5 @@
+import useStorage from "@/hooks/useStorage";
+import { getMusicDetalis } from "@/service";
 import { createPinia } from "pinia";
 import { defineStore } from "pinia";
 import { musicInfo } from "./type";
@@ -24,6 +26,23 @@ export const mainStore = defineStore("main", {
       this.currentMusic = this.musicLists[0] ?? {};
       this.currentIndex = 0;
     },
+    async initMusicLists() {
+      const { getStorage } = useStorage();
+      const musicLists: musicInfo[] = getStorage("musicLists");
+      if (musicLists) {
+        const ids = musicLists.map((music) => music.songId);
+        const res: any = await getMusicDetalis(ids.join(","));
+        //一次获取多首歌的 接口返回顺序混乱 需要分辨id
+        res.data.forEach((music: any) => {
+          const findItem = musicLists.find((item) => item.songId === music.id);
+          findItem!.songUrl = music.url;
+        });
+        if (musicLists) {
+          this.musicLists = musicLists;
+          this.currentMusic = this.musicLists[0];
+        }
+      }
+    },
     changeToPrevious() {
       if (this.currentIndex === 0) {
         this.currentIndex = this.musicLists.length - 1;
@@ -43,6 +62,10 @@ export const mainStore = defineStore("main", {
     changToRandom() {
       const random = Math.floor(this.musicLists.length * Math.random());
       this.currentIndex = random;
+      this.currentMusic = this.musicLists[this.currentIndex];
+    },
+    changToindex(index: number) {
+      this.currentIndex = index;
       this.currentMusic = this.musicLists[this.currentIndex];
     },
     changAutoControl(type: string, mode: musicMode) {
@@ -75,6 +98,14 @@ export const mainStore = defineStore("main", {
         }
       }
     },
+    clearMusicLists() {
+      this.musicLists = [];
+      this.currentIndex = 0;
+      this.currentMusic = null as any;
+    },
   },
 });
+export function setupStore() {
+  mainStore().initMusicLists();
+}
 export default pinia;
