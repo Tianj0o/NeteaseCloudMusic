@@ -1,5 +1,24 @@
 <script setup lang="ts">
 import searchMusic from './searchMusic.vue';
+import loginModal from './loginModal.vue';
+import { ref } from '@vue/reactivity';
+import { mainStore } from '@/store';
+const loginModalRef = ref<InstanceType<typeof loginModal>>()
+const { ipcRenderer } = (window as any).require('electron');
+const handleLoginClick = () => {
+  console.log(22);
+  (loginModalRef.value as any).isShowLogin = !(loginModalRef.value as any).isShowLogin
+}
+const handleMinWindow = () => {
+  ipcRenderer.send('winAction', 'min')
+}
+const handleMaxWindow = () => {
+  ipcRenderer.send('winAction', 'max')
+}
+const handleCloseWindow = () => {
+  ipcRenderer.send('winAction', 'close')
+}
+const store = mainStore()
 </script>
 
 <template>
@@ -19,8 +38,10 @@ import searchMusic from './searchMusic.vue';
     </div>
     <div class="right flex">
       <div class="info flex">
-        <img src="@/assets/info.png" />
-        <div class="name">Ooootttt</div>
+        <img :src="store.avatarUrl ?? ''" />
+        <div class="name">{{ store.name }}</div>
+        <div @click="handleLoginClick">未登录</div>
+        <login-modal ref="loginModalRef"></login-modal>
       </div>
       <div class="setting flex">
         <i class="icon iconfont icon-pifu"></i>
@@ -29,9 +50,9 @@ import searchMusic from './searchMusic.vue';
       </div>
       <div class="window flex">
         <i class="icon iconfont icon-zuixiaohua1"></i>
-        <i class="icon iconfont icon-zuixiaohua"></i>
-        <i class="icon iconfont icon-zuidahua"></i>
-        <i class="icon iconfont icon-guanbi"></i>
+        <i @click="handleMinWindow" class="icon iconfont icon-zuixiaohua"></i>
+        <i @click="handleMaxWindow" class="icon iconfont icon-zuidahua"></i>
+        <i @click="handleCloseWindow" class="icon iconfont icon-guanbi"></i>
       </div>
     </div>
   </div>
@@ -90,5 +111,10 @@ import searchMusic from './searchMusic.vue';
 }
 .icon {
   margin-left: 20px;
+  -webkit-app-region: no-drag;
+}
+.search,
+.info {
+  -webkit-app-region: no-drag;
 }
 </style>

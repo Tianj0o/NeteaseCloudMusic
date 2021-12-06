@@ -1,5 +1,5 @@
 import useStorage from "@/hooks/useStorage";
-import { getMusicDetalis } from "@/service";
+import { getMusicDetalis, loginData, userLogin } from "@/service";
 import { createPinia } from "pinia";
 import { defineStore } from "pinia";
 import { musicInfo } from "./type";
@@ -13,14 +13,32 @@ export enum musicMode {
 export const mainStore = defineStore("main", {
   state: () => {
     return {
-      title: 123456,
-      name: "qitianjia",
+      name: "",
+      id: 0,
       musicLists: <musicInfo[]>[],
       currentMusic: <musicInfo>{},
       currentIndex: 0,
+      avatarUrl: "",
     };
   },
   actions: {
+    async loginAction(data: loginData) {
+      const resData: any = await userLogin(data);
+      this.id = resData?.profile?.userId;
+      this.name = resData?.profile?.nickname;
+      this.avatarUrl = resData?.profile?.avatarUrl;
+      const { setStorage } = useStorage();
+      setStorage("id", this.id);
+      setStorage("avatarUrl", this.avatarUrl);
+      setStorage("name", this.name);
+      console.log("登陆成功");
+    },
+    initLoginInfo() {
+      const { getStorage } = useStorage();
+      this.avatarUrl = getStorage("avatarUrl");
+      this.id = getStorage("id");
+      this.name = getStorage("name");
+    },
     initMusic() {
       console.log(123);
       this.currentMusic = this.musicLists[0] ?? {};
@@ -107,5 +125,6 @@ export const mainStore = defineStore("main", {
 });
 export function setupStore() {
   mainStore().initMusicLists();
+  mainStore().initLoginInfo();
 }
 export default pinia;

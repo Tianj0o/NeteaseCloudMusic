@@ -8,7 +8,7 @@ import navHeader from '@/components/navHeader.vue';
     <div class="header">
       <nav-header></nav-header>
     </div>
-    <div class="container">
+    <div class="container" id="container">
       <div class="menu">menu</div>
       <div class="body" id="container-body">body</div>
     </div>
@@ -29,17 +29,19 @@ import navHeader from '@/components/navHeader.vue';
     max-width: 100%;
     height: 60px;
     background-color: rgb(32, 32, 35);
+    -webkit-app-region: drag; // electron 可拖拽这个区域
   }
   .container {
     display: flex;
     flex: 1;
+    position: relative;
     .menu {
       width: 200px;
       background-color: blueviolet;
     }
     .body {
       flex: 1;
-      background-color: crimson;
+      background-color: rgb(126, 125, 125);
       position: relative;
     }
   }

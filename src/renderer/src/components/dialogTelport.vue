@@ -5,7 +5,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   teleport: 'body'
 })
-</script>
+                                                                                                                                                                        </script>
 
 <template>
   <div class="dialog" v-if="props.modelValue">
@@ -23,5 +23,6 @@ const props = withDefaults(defineProps<{
   top: 0;
   height: 100%;
   width: 100%;
+  /* z-index: -9; */
 }
 </style>

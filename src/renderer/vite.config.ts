@@ -11,4 +11,7 @@ export default defineConfig({
     },
     extensions: [".js", ".json", ".ts"],
   },
+  optimizeDeps: {
+    exclude: ["electron"],
+  },
 });

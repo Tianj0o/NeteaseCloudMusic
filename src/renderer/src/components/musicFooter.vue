@@ -116,9 +116,17 @@ const handleClearList = () => {
     }
     .music-name {
       margin-bottom: 5px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 120px;
     }
     .author {
       font-size: 0.8rem;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 120px;
     }
   }
   .music-player {

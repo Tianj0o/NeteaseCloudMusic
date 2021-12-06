@@ -13,3 +13,12 @@ export const getMusicDetalis = (ids: string) => {
     url: `/song/url?id=${ids}`,
   });
 };
+export interface loginData {
+  tel: string;
+  password: string;
+}
+export const userLogin = (data: loginData) => {
+  return request.post({
+    url: `/login/cellphone?phone=${data.tel}&password=${data.password}`,
+  });
+};
