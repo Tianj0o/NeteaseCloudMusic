@@ -6,7 +6,6 @@ import { mainStore } from '@/store';
 const loginModalRef = ref<InstanceType<typeof loginModal>>()
 const { ipcRenderer } = (window as any).require('electron');
 const handleLoginClick = () => {
-  console.log(22);
   (loginModalRef.value as any).isShowLogin = !(loginModalRef.value as any).isShowLogin
 }
 const handleMinWindow = () => {
@@ -40,7 +39,7 @@ const store = mainStore()
       <div class="info flex">
         <img :src="store.avatarUrl ?? ''" />
         <div class="name">{{ store.name }}</div>
-        <div @click="handleLoginClick">未登录</div>
+        <div @click="handleLoginClick" v-if="!store.id">未登录</div>
         <login-modal ref="loginModalRef"></login-modal>
       </div>
       <div class="setting flex">

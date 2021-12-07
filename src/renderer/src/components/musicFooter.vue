@@ -2,23 +2,23 @@
 import musicPlayer from './musicPlayer.vue'
 import { mainStore } from '@/store';
 import { computed, ref } from '@vue/reactivity';
-import dialogTelport from './dialogTelport.vue';
-import { formateTimeToString } from '@/hooks/formatTime'
 import useStorage from '@/hooks/useStorage';
 import { nextTick } from '@vue/runtime-core';
+import musicList from './musicList.vue';
 const store = mainStore()
 let currentMusic = computed(() => store.currentMusic)
 
-const isShow = ref(false)
-const handleMusicListClick = () => {
-  isShow.value = !isShow.value
-}
+
 const musicLists = computed(() => {
   const musicLists = store.musicLists
   const { setStorage } = useStorage()
   setStorage('musicLists', musicLists)
   return musicLists
 })
+const isShow = ref(false)
+const handleMusicListClick = () => {
+  isShow.value = !isShow.value
+}
 let tick = 0;
 const musicPlayerRef = ref<InstanceType<typeof musicPlayer>>()
 const musicListItemClick = (index: number) => {
@@ -35,11 +35,7 @@ const musicListItemClick = (index: number) => {
     tick = 0
   }, 700)
 }
-const handleClearList = () => {
-  const { deleteStorage } = useStorage()
-  store.clearMusicLists()
-  deleteStorage('musicLists')
-}
+
 </script>
 <template>
   <div class="footer">
@@ -58,30 +54,11 @@ const handleClearList = () => {
     <div class="music-lists">
       <div class="music-list" @click="handleMusicListClick">
         <i class="icon iconfont icon-1804-liufupinggongnengtubiao-24"></i>
-        <dialog-telport teleport=".body" v-model="isShow">
-          <div class="playList">
-            <div class="header">
-              <div class="title">当前播放</div>
-              <div style="display: flex;justify-content: space-between;">
-                <span class="count">总{{ musicLists.length }}首</span>
-                <span class="clearBtn" @click="handleClearList">清空列表</span>
-              </div>
-            </div>
-            <div class="lists">
-              <template v-for="(musicInfo,index) in musicLists">
-                <div
-                  @click="musicListItemClick(index)"
-                  class="list"
-                  :class="index % 2 === 0 ? '' : 'special'"
-                >
-                  <div class="songName">{{ musicInfo.songName }}</div>
-                  <div class="songAuther">{{ musicInfo.songAuthor }}</div>
-                  <div class="songDra">{{ formateTimeToString(musicInfo.songTime) }}</div>
-                </div>
-              </template>
-            </div>
-          </div>
-        </dialog-telport>
+        <music-list
+          @musicListItemClick="musicListItemClick"
+          :musicLists="musicLists"
+          :isShow="isShow"
+        ></music-list>
       </div>
     </div>
   </div>
@@ -144,89 +121,7 @@ const handleClearList = () => {
     }
   }
 }
-.playList {
-  height: 100%;
-  width: 390px;
-  background-color: #363636;
-  color: whitesmoke;
-  position: absolute;
-  right: 0;
-  display: flex;
-  flex-direction: column;
 
-  .header {
-    padding: 20px 15px;
-    .title {
-      font-size: 20px;
-      font-weight: bolder;
-      margin-bottom: 10px;
-    }
-    .count {
-      font-size: 13px;
-      opacity: 0.7;
-    }
-    .clearBtn {
-      text-align: end;
-    }
-  }
-  .lists {
-    overflow-y: scroll;
-
-    border-top: rgb(63, 63, 63) 1px solid;
-    .list {
-      display: flex;
-      // justify-content: space-between;
-      align-items: center;
-      padding: 5px 15px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 13px;
-      &:hover {
-        background-color: #3d3d3d;
-      }
-      .songName {
-        width: 178px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
-      .songAuther {
-        max-width: 95px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
-      .songDra {
-        opacity: 0.7;
-        flex: 1;
-        text-align: end;
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
-    }
-    .list.special {
-      background-color: #393939;
-    }
-  }
-}
-::-webkit-scrollbar {
-  width: 4px;
-  height: 30px;
-}
-::-webkit-scrollbar-track {
-  background: #2b2b2b;
-  border-radius: 2px;
-  height: 30px;
-}
-::-webkit-scrollbar-thumb {
-  background: #3f3f3f;
-  border-radius: 2px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #747474;
-}
-::-webkit-scrollbar-corner {
-  background: #f6f6f6;
-}
 img[src=""],
 img:not([src]) {
   opacity: 0;

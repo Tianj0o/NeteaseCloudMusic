@@ -20,7 +20,6 @@ app.on("ready", async () => {
     win.webContents.openDevTools()
   })
   await session.defaultSession.loadExtension(path.resolve(__dirname + '../../../devtools/ljjemllljcmogpfapbkkighbhhppjdbg/6.0.0.20_0'))
-  // win.loadFile('../renderer/dist/index.html')
   win.loadURL("http://localhost:3000/");
 });
 ipcMain.on('loginAction', (event, args) => {

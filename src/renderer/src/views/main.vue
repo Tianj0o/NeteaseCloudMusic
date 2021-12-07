@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import footerVue from '@/components/musicFooter.vue';
 import navHeader from '@/components/navHeader.vue';
+import navMenu from '@/components/navMenu.vue';
 </script>
 
 <template>
@@ -9,7 +10,9 @@ import navHeader from '@/components/navHeader.vue';
       <nav-header></nav-header>
     </div>
     <div class="container" id="container">
-      <div class="menu">menu</div>
+      <div class="menu">
+        <nav-menu></nav-menu>
+      </div>
       <div class="body" id="container-body">body</div>
     </div>
     <div class="footer">
@@ -37,7 +40,7 @@ import navHeader from '@/components/navHeader.vue';
     position: relative;
     .menu {
       width: 200px;
-      background-color: blueviolet;
+      background-color: #2b2b2b;
     }
     .body {
       flex: 1;
