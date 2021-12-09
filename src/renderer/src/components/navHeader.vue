@@ -4,18 +4,18 @@ import loginModal from './loginModal.vue';
 import { ref } from '@vue/reactivity';
 import { mainStore } from '@/store';
 const loginModalRef = ref<InstanceType<typeof loginModal>>()
-const { ipcRenderer } = (window as any).require('electron');
+// const { ipcRenderer } = (window as any).require('electron');
 const handleLoginClick = () => {
   (loginModalRef.value as any).isShowLogin = !(loginModalRef.value as any).isShowLogin
 }
 const handleMinWindow = () => {
-  ipcRenderer.send('winAction', 'min')
+  // ipcRenderer.send('winAction', 'min')
 }
 const handleMaxWindow = () => {
-  ipcRenderer.send('winAction', 'max')
+  // ipcRenderer.send('winAction', 'max')
 }
 const handleCloseWindow = () => {
-  ipcRenderer.send('winAction', 'close')
+  // ipcRenderer.send('winAction', 'close')
 }
 const store = mainStore()
 </script>

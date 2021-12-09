@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { navMenuConfig } from '@/config/navMenu';
+import { navMenuConfig } from '@/config';
+import { useRouter } from 'vue-router';
+const router = useRouter()
 </script>
 
 <template>
   <div class="nav-menu">
     <div class="system">
       <template v-for="item in navMenuConfig">
-        <div class="sysytem-item">{{ item.name }}</div>
+        <div @click="router.push(item.path)" class="sysytem-item">{{ item.name }}</div>
       </template>
     </div>
   </div>
