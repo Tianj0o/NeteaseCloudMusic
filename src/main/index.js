@@ -1,4 +1,5 @@
-const { app, BrowserWindow, ipcMain, globalShortcut, session } = require("electron");
+const { app, BrowserWindow, globalShortcut, session } = require("electron");
+const { useMessage } = require('./message')
 const path = require('path')
 let win = null;
 app.on("ready", async () => {
@@ -22,24 +23,4 @@ app.on("ready", async () => {
   await session.defaultSession.loadExtension(path.resolve(__dirname + '../../../devtools/ljjemllljcmogpfapbkkighbhhppjdbg/6.0.0.20_0'))
   win.loadURL("http://localhost:3000/");
 });
-ipcMain.on('loginAction', (event, args) => {
-  console.log(args)
-})
-ipcMain.on('winAction', (event, args) => {
-  switch (args) {
-    case "min":
-      win.minimize()
-      break;
-    case 'max':
-      if (win.isMaximized()) {
-        win.unmaximize()
-      } else {
-        win.maximize()
-      }
-      break
-    case 'close':
-      break
-    default:
-      break
-  }
-})
+useMessage(win)

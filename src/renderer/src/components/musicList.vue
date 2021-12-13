@@ -58,7 +58,7 @@ const handleRefresh = () => {
   background-color: #363636;
   color: whitesmoke;
   position: absolute;
-  right: 0;
+  right: 25px;
   display: flex;
   flex-direction: column;
 

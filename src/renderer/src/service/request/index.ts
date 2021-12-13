@@ -10,10 +10,10 @@ class TRequest {
       return res.data;
     });
   }
-  request(config: AxiosRequestConfig) {
-    return new Promise((resolve, reject) => {
+  request<T = any>(config: AxiosRequestConfig) {
+    return new Promise<T>((resolve, reject) => {
       this.instance
-        .request(config)
+        .request<any, T>(config)
         .then((res) => {
           resolve(res);
         })
@@ -22,11 +22,11 @@ class TRequest {
         });
     });
   }
-  get(config: AxiosRequestConfig) {
-    return this.request({ ...config, method: "GET" });
+  get<T = any>(config: AxiosRequestConfig) {
+    return this.request<T>({ ...config, method: "GET" });
   }
-  post(config: AxiosRequestConfig) {
-    return this.request({ ...config, method: "POST" });
+  post<T = any>(config: AxiosRequestConfig) {
+    return this.request<T>({ ...config, method: "POST" });
   }
 }
 

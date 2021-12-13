@@ -49,6 +49,8 @@ import navMenu from '@/components/navMenu.vue';
       background-color: #2b2b2b;
     }
     .body {
+      overflow-x: hidden;
+      padding: 20px 25px;
       flex: 1;
       background-color: #2b2b2b;
       position: relative;

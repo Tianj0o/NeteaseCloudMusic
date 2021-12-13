@@ -18,7 +18,6 @@ const router = useRouter()
 
 <style scoped lang="less">
 .discoverMusic {
-  padding: 20px 25px;
   .header {
     font-size: 18px;
     color: #b6cad0;
