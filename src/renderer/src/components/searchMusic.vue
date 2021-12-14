@@ -39,9 +39,10 @@ const handleQueryClick = () => {
             songId: id,
             picUrl: res.songs[0].al.picUrl
           })
-          if (Object.keys(store.currentMusic).length === 0) {
+          if (!store.currentMusic) {
             store.initMusic()
           }
+
         })
       })
     })

@@ -12,7 +12,7 @@ const router = useRouter()
       </template>
     </div>
 
-    <router-view></router-view>
+    <router-view class="router-view"></router-view>
   </div>
 </template>
 

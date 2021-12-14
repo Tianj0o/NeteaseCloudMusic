@@ -53,6 +53,7 @@ const handleRefresh = () => {
 
 <style scoped lang="less">
 .playList {
+  z-index: 100;
   height: 100%;
   width: 390px;
   background-color: #363636;

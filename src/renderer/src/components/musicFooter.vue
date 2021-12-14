@@ -12,7 +12,9 @@ let currentMusic = computed(() => store.currentMusic)
 const musicLists = computed(() => {
   const musicLists = store.musicLists
   const { setStorage } = useStorage()
-  setStorage('musicLists', musicLists)
+  if (musicList.length > 0) {
+    setStorage('musicLists', musicLists)
+  }
   return musicLists
 })
 const isShow = ref(false)
@@ -68,7 +70,7 @@ const musicListItemClick = (index: number) => {
 .footer {
   display: flex;
   align-items: center;
-  padding: 0px 10px;
+  // padding: 0px 10px;
   height: 100%;
   .music-image {
     display: flex;

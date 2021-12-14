@@ -2,9 +2,6 @@
 import footerVue from '@/components/musicFooter.vue';
 import navHeader from '@/components/navHeader.vue';
 import navMenu from '@/components/navMenu.vue';
-
-
-
 </script>
 
 <template>
@@ -31,7 +28,6 @@ import navMenu from '@/components/navMenu.vue';
   display: flex;
   flex-direction: column;
   height: 100vh;
-  overflow-y: hidden;
   overflow-x: hidden;
   .header {
     max-width: 100%;
@@ -44,9 +40,21 @@ import navMenu from '@/components/navMenu.vue';
     display: flex;
     flex: 1;
     position: relative;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      width: 0;
+    }
     .menu {
       width: 200px;
       background-color: #2b2b2b;
+      overflow-y: scroll;
+      &::-webkit-scrollbar {
+        width: 0;
+        border-radius: 0px;
+      }
+      &:hover::-webkit-scrollbar {
+        width: 4px;
+      }
     }
     .body {
       overflow-x: hidden;
@@ -55,9 +63,11 @@ import navMenu from '@/components/navMenu.vue';
       background-color: #2b2b2b;
       position: relative;
       border-left: #444444 1px solid;
+      overflow-y: scroll;
     }
   }
   .footer {
+    max-width: auto;
     height: 70px;
     background-color: rgb(32, 32, 35);
   }
