@@ -18,7 +18,8 @@ export const disMusicStore = defineStore("disMusic", {
   state: () => {
     return {
       bannerListsData: <bannerData[]>[],
-      dailyPlaylist: <playList[]>[],
+      dailyPlaylist: <playList[]>[], //每日推荐歌单
+      daiyluMusic: <playList[]>[], //每日推荐歌曲
     };
   },
   actions: {
@@ -40,11 +41,14 @@ export const disMusicStore = defineStore("disMusic", {
     //每日推荐
     async getDailyPlayListData() {
       const { recommend } = await getDailyPlayList();
-      // const data2 = await getDailyMusic();
+      const data2 = await getDailyMusic();
       this.dailyPlaylist = recommend ?? [];
-
+      console.log(data2, 2);
+      if (data2?.data?.dailySongs) {
+        this.daiyluMusic = data2.data.dailySongs;
+      }
       const { setStorage } = useStorage();
-      console.log(this.dailyPlaylist);
+      // console.log(this.dailyPlaylist);
       if (this.dailyPlaylist.length > 0) {
         setStorage("dailyPlayList", this.dailyPlaylist);
       }

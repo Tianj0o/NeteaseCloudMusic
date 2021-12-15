@@ -11,19 +11,25 @@ const router = useRouter()
         <div class="router" @click="router.push(item.path)">{{ item.name }}</div>
       </template>
     </div>
-
-    <router-view class="router-view"></router-view>
+    <div class="container">
+      <router-view class="router-view"></router-view>
+    </div>
   </div>
 </template>
 
 <style scoped lang="less">
 .discoverMusic {
+  // overflow-y: scroll;
+  height: 95%;
   .header {
     font-size: 18px;
     color: #b6cad0;
     display: flex;
     align-items: center;
+    padding-bottom: 20px;
+    width: 100%;
 
+    background-color: #2b2b2b;
     .router {
       margin-right: 20px;
       &:hover {
@@ -31,5 +37,13 @@ const router = useRouter()
       }
     }
   }
+}
+.container {
+  height: 100%;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+  overflow-x: hidden;
 }
 </style>

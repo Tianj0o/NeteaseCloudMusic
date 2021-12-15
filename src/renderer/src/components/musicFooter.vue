@@ -70,7 +70,7 @@ const musicListItemClick = (index: number) => {
 .footer {
   display: flex;
   align-items: center;
-  // padding: 0px 10px;
+  padding: 0 20px 0 5px;
   height: 100%;
   .music-image {
     display: flex;

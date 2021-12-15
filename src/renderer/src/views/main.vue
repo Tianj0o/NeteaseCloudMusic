@@ -63,7 +63,8 @@ import navMenu from '@/components/navMenu.vue';
       background-color: #2b2b2b;
       position: relative;
       border-left: #444444 1px solid;
-      overflow-y: scroll;
+      // overflow-y: scroll;
+      overflow-x: hidden;
     }
   }
   .footer {
