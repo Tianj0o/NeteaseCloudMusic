@@ -2,6 +2,7 @@ import {
   getBannerData,
   getDailyMusic,
   getDailyPlayList,
+  getNewMusiclist,
 } from "@/service/discoverMusic";
 import useStorage from "@/hooks/useStorage";
 import { defineStore } from "pinia";
@@ -38,17 +39,17 @@ export const disMusicStore = defineStore("disMusic", {
         this.bannerListsData = list;
       }
     },
-    //每日推荐
+    //每日推荐 歌曲&歌单
     async getDailyPlayListData() {
-      const { recommend } = await getDailyPlayList();
+      // const { recommend } = await getDailyPlayList();
       const data2 = await getDailyMusic();
-      this.dailyPlaylist = recommend ?? [];
-      console.log(data2, 2);
+      const { result } = await getNewMusiclist();
+
+      this.dailyPlaylist = result ?? [];
       if (data2?.data?.dailySongs) {
         this.daiyluMusic = data2.data.dailySongs;
       }
       const { setStorage } = useStorage();
-      // console.log(this.dailyPlaylist);
       if (this.dailyPlaylist.length > 0) {
         setStorage("dailyPlayList", this.dailyPlaylist);
       }

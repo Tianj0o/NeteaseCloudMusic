@@ -4,7 +4,9 @@ import { computed } from 'vue';
 import tCarousel from './cpns/tCarousel.vue';
 import TCard from '@/components/tCard.vue';
 import tGrid from '@/components/tGrid.vue';
+import { useToPage } from '@/hooks/useToPage';
 const store = disMusicStore()
+
 store.getBannerListData()
 const bannerlists = computed(() => store.bannerListsData)
 store.getDailyPlayListData()
@@ -16,6 +18,9 @@ const dailyPlaylist = computed(() => {
 })
 
 const firSongPicUrl = computed(() => (store.daiyluMusic[0] as any)?.al?.picUrl)
+
+const { handleMusiclistClick } = useToPage()
+
 </script>
 
 <template>
@@ -37,7 +42,7 @@ const firSongPicUrl = computed(() => (store.daiyluMusic[0] as any)?.al?.picUrl)
         </div>
       </t-card>
       <template v-for="item in dailyPlaylist">
-        <t-card v-bind="item"></t-card>
+        <t-card v-bind="item" @click="handleMusiclistClick(item.id)"></t-card>
       </template>
     </t-grid>
   </div>
