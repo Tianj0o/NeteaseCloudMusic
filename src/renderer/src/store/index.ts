@@ -1,5 +1,5 @@
 import useStorage from "@/hooks/useStorage";
-import { getMusicDetalis, loginData, userLogin } from "@/service";
+import { getMusicUrl, loginData, userLogin } from "@/service";
 import { createPinia } from "pinia";
 import { defineStore } from "pinia";
 import { musicInfo } from "./type";
@@ -49,7 +49,7 @@ export const mainStore = defineStore("main", {
       const musicLists: musicInfo[] = getStorage("musicLists");
       if (musicLists) {
         const ids = musicLists.map((music) => music.songId);
-        const res: any = await getMusicDetalis(ids.join(","));
+        const res: any = await getMusicUrl(ids.join(","));
         //一次获取多首歌的 接口返回顺序混乱 需要分辨id
         res.data.forEach((music: any) => {
           const findItem = musicLists.find((item) => item.songId === music.id);

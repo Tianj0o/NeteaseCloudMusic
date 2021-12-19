@@ -41,8 +41,8 @@ const { handleMusiclistClick } = useToPage()
           </div>
         </div>
       </t-card>
-      <template v-for="item in dailyPlaylist">
-        <t-card v-bind="item" @click="handleMusiclistClick(item.id)"></t-card>
+      <template v-for="item,index in dailyPlaylist">
+        <t-card v-bind="item" @click="handleMusiclistClick(item.id, index)"></t-card>
       </template>
     </t-grid>
   </div>

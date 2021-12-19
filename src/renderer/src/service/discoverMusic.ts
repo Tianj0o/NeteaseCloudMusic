@@ -58,3 +58,11 @@ export const getPlaylistAll = (id: number) => {
     url: `playlist/track/all?id=${id}`,
   });
 };
+
+// 获取某个歌单的详情
+
+export const getPlaylistDetails = (id: number) => {
+  return request.get({
+    url: `/playlist/detail?id=${id}`,
+  });
+};

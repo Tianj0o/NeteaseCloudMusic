@@ -14,7 +14,12 @@ import navMenu from '@/components/navMenu.vue';
         <nav-menu></nav-menu>
       </div>
       <div class="body" id="container-body">
-        <router-view></router-view>
+        <suspense>
+          <router-view></router-view>
+          <template #fallback>
+            <div>Loading...</div>
+          </template>
+        </suspense>
       </div>
     </div>
     <div class="footer">
@@ -58,7 +63,7 @@ import navMenu from '@/components/navMenu.vue';
     }
     .body {
       overflow-x: hidden;
-      padding: 20px 25px;
+      padding: 35px 25px;
       flex: 1;
       background-color: #2b2b2b;
       position: relative;

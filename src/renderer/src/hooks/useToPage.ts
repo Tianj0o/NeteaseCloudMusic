@@ -1,11 +1,12 @@
-import { getPlaylistAll } from "@/service/discoverMusic";
 import router from "@/router";
-// 点击某一歌单获取数据并跳转页面
+import { disMusicStore } from "@/store/discoverMusic";
+let currentIndex = 0;
 export const useToPage = () => {
-  const handleMusiclistClick = async (id: number) => {
-    // const musicListdata = await getPlaylistAll(id);
-
-    console.log("tiaozhuan");
+  const handleMusiclistClick = (id: number, index?: number) => {
+    router.push(`/main/musicList/${id}`);
+    if (index !== undefined) {
+      currentIndex = index;
+    }
   };
 
   return {

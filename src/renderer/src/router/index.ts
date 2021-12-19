@@ -8,6 +8,12 @@ const routes: RouteRecordRaw[] = [
     name: "main",
     path: "/main",
     component: () => import("@/views/main.vue"),
+    children: [
+      {
+        path: "/main/musicList/:id",
+        component: () => import("@/views/discoverMusic/musicListPage.vue"),
+      },
+    ],
   },
 ];
 

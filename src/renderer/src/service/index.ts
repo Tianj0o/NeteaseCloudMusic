@@ -8,9 +8,16 @@ export const request = new TRequest({
 });
 
 //获取歌曲的url
-export const getMusicDetalis = (ids: string) => {
+export const getMusicUrl = (ids: string) => {
   return request.get({
     url: `/song/url?id=${ids}`,
+  });
+};
+
+//获取歌曲的信息
+export const getMusicDetails = (ids: string) => {
+  return request.get({
+    url: `/song/detail?ids=${ids}`,
   });
 };
 export interface loginData {

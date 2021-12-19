@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 const tCardRef = ref<HTMLElement>()
 
 defineProps<{
   picUrl?: string,
   targetId?: number,
-  name: string
+  name?: string
 }>()
 
 </script>
@@ -17,7 +17,7 @@ defineProps<{
         <img style="width: 100%;height: 100%;" :src="picUrl" />
       </slot>
     </div>
-    <div class="footer">{{ name }}</div>
+    <div v-if="name" class="footer">{{ name }}</div>
   </div>
 </template>
 
@@ -25,12 +25,12 @@ defineProps<{
 .t-card {
   width: 100%;
   .container {
-    margin-bottom: 5px;
     img {
       border-radius: 5px;
     }
   }
   .footer {
+    padding-top: 5px;
     color: #d0d0d0;
     overflow: hidden;
     text-overflow: ellipsis;

@@ -14,6 +14,8 @@ export interface playList {
   name: string;
   id: number;
   picUrl: string;
+  trackCount: number;
+  playCount: number;
 }
 export const disMusicStore = defineStore("disMusic", {
   state: () => {
