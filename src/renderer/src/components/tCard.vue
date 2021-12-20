@@ -14,7 +14,7 @@ defineProps<{
   <div class="t-card" ref="tCardRef">
     <div class="container">
       <slot>
-        <img style="width: 100%;height: 100%;" :src="picUrl" />
+        <img :src="picUrl" />
       </slot>
     </div>
     <div v-if="name" class="footer">{{ name }}</div>
@@ -25,8 +25,15 @@ defineProps<{
 .t-card {
   width: 100%;
   .container {
+    height: 0;
+    position: relative;
+    padding-bottom: 100%;
+    // padding-bottom 根据宽度决定 使得容器能后高度和宽度一样高
     img {
       border-radius: 5px;
+      height: 100%;
+      width: 100%;
+      position: absolute;
     }
   }
   .footer {
