@@ -39,7 +39,9 @@ const setUpnavMenuRouters = () => {
     }
   }
 };
-const discoverMusicfiles = import.meta.glob("../views/discoverMusic/*.vue");
+const discoverMusicfiles = import.meta.glob(
+  "../views/discoverMusic/views/*.vue"
+);
 export const discoverMusicConfig: menuItem[] = [
   {
     name: "个性推荐",
@@ -70,7 +72,8 @@ export const discoverMusicConfig: menuItem[] = [
 const setUpDiscoverMusicFiles = () => {
   for (let index in discoverMusicfiles) {
     const path =
-      "/main/" + index.split("/")[2] + "/" + index.split("/")[3].slice(0, -4);
+      "/main/" + index.split("/")[2] + "/" + index.split("/")[4].slice(0, -4);
+
     //判断是否有这个路由
     if (discoverMusicConfig.findIndex((item) => item.path === path) != -1) {
       router.addRoute("discoverMusic", {

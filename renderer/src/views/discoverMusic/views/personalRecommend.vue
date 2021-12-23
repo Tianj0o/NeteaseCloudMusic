@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { disMusicStore } from '@/store/discoverMusic';
 import { computed } from 'vue';
-import tCarousel from './cpns/tCarousel.vue';
+import tCarousel from '../cpns/tCarousel.vue';
 import TCard from '@/components/tCard.vue';
 import tGrid from '@/components/tGrid.vue';
 import { useToPage } from '@/hooks/useToPage';

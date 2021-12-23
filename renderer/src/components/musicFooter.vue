@@ -12,7 +12,7 @@ let currentMusic = computed(() => store.currentMusic)
 const musicLists = computed(() => {
   const musicLists = store.musicLists
   const { setStorage } = useStorage()
-  if (musicList.length > 0) {
+  if (musicLists.length > 0) {
     setStorage('musicLists', musicLists)
   }
   return musicLists

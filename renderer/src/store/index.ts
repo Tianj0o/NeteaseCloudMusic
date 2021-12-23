@@ -40,7 +40,7 @@ export const mainStore = defineStore("main", {
       this.name = getStorage("name");
     },
     initMusic() {
-      console.log(123);
+      const { getStorage } = useStorage();
       this.currentMusic = this.musicLists[0] ?? {};
       this.currentIndex = 0;
     },

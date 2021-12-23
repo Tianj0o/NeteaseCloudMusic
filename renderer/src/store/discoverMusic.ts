@@ -1,7 +1,6 @@
 import {
   getBannerData,
   getDailyMusic,
-  getDailyPlayList,
   getNewMusiclist,
 } from "@/service/discoverMusic";
 import useStorage from "@/hooks/useStorage";

@@ -8,10 +8,15 @@ const routes: RouteRecordRaw[] = [
     name: "main",
     path: "/main",
     component: () => import("@/views/main.vue"),
+    redirect: "/main/discoverMusic/personalRecommend",
     children: [
       {
         path: "/main/musicList/:id",
         component: () => import("@/views/discoverMusic/musicListPage.vue"),
+      },
+      {
+        path: "/main/songResultPage/:query",
+        component: () => import("@/components/songResultPage.vue"),
       },
     ],
   },
