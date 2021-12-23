@@ -1,23 +1,21 @@
 <script setup lang="ts">
-import type { music } from '../musicListPage.vue'
+import type { music } from '@/store/type'
 import { formateTimeToString } from '@/hooks/formatTime'
 import { mainStore } from '@/store'
-defineProps<{
+import { useClickTwice } from '@/hooks/useClick'
+const props = defineProps<{
   musiclists: music[]
 }>()
 const store = mainStore()
-let tick = 0
-const musicItemClick = () => {
-  tick++
-  setTimeout(() => {
-    if (tick >= 2) {
-      console.log('连续点击两次')
-      store.clearMusicLists()
-      store.musicLists.push()
-    }
-    tick = 0
-  }, 1000)
 
+const clickTwice = useClickTwice()
+
+
+const musicItemClick = (music: music, index: number) => {
+  clickTwice(() => {
+    store.musicLists = props.musiclists
+    store.changToindex(index)
+  })
 }
 </script>
 
@@ -32,13 +30,17 @@ const musicItemClick = () => {
     </div>
     <div class="music-table">
       <template v-for="(music,index) in musiclists" :key="music.name">
-        <div class="music-item" @click="musicItemClick" :class="{ 'special': index % 2 === 0 }">
+        <div
+          class="music-item"
+          @click="musicItemClick(music, index)"
+          :class="{ 'special': index % 2 === 0 }"
+        >
           <div style="width: 10px;margin-right: 10px;">{{ (index + '').padStart(2, '0') }}</div>
           <div class="handler">
             <i class="icon iconfont icon-xihuan" style="margin-right: 5px;"></i>
             <i class="icon iconfont icon-xiazai"></i>
           </div>
-          <div class="name" style="color: #d1d1d1;">{{ music.name }}</div>
+          <div class="name" style="color: #d1d1d1;font-size: 13px;">{{ music.name }}</div>
           <div class="singer">{{ music.ar[0].name }}</div>
           <div class="album">{{ music.al.name }}</div>
           <div class="duration">{{ formateTimeToString(Number(music.dt.toString().slice(0, 3))) }}</div>

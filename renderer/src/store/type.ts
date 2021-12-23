@@ -1,24 +1,8 @@
-export interface musicInfo {
-  songName: string;
-  songAuthor: string;
-  songUrl: string;
-  songTime: number;
-  songId: number;
-  picUrl: string;
-}
-
-export interface song {
-  name: string;
-  id: number;
-  picUrl: string;
-  trackCount: number;
-  playCount: number;
-}
-
 export interface music {
-  name: string;
-  id: number;
-  ar: { name: string }[];
-  dt: number;
-  al: { name: string };
+  name: string; // 歌曲名
+  id: number; //歌曲id
+  ar: { name: string }[]; //歌手 名
+  dt: number; //歌曲时间
+  al: { name: string; picUrl: string }; // 歌曲专辑名 图片
+  url?: string;
 }

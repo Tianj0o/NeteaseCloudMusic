@@ -21,7 +21,7 @@ export const userLogin = (data: loginData) => {
 };
 //获取歌曲的url
 export const getMusicUrl = (ids: string) => {
-  return request.get({
+  return request.get<{ data: { url: string }[] }>({
     url: `/song/url?id=${ids}`,
   });
 };

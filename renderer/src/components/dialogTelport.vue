@@ -18,12 +18,4 @@ const props = withDefaults(defineProps<{
 </template>
 
 <style scoped>
-.telePort {
-  position: fixed;
-  bottom: 70px;
-  height: calc(100% - 131px);
-  width: 100%;
-  right: -24px;
-  /* z-index: -9; */
-}
 </style>

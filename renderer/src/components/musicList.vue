@@ -4,8 +4,9 @@ import dialogTelport from './dialogTelport.vue';
 import { mainStore } from '@/store';
 import useStorage from '@/hooks/useStorage';
 import { formateTimeToString } from '@/hooks/formatTime'
+import { music } from '@/store/type';
 defineProps<{
-  musicLists: any[],
+  musicLists: music[],
   isShow: boolean
 }>()
 const emit = defineEmits(['musicListItemClick'])
@@ -41,9 +42,9 @@ const handleRefresh = () => {
             class="list"
             :class="index % 2 === 0 ? '' : 'special'"
           >
-            <div class="songName">{{ musicInfo.songName }}</div>
-            <div class="songAuther">{{ musicInfo.songAuthor }}</div>
-            <div class="songDra">{{ formateTimeToString(musicInfo.songTime) }}</div>
+            <div class="songName">{{ musicInfo.name }}</div>
+            <div class="songAuther">{{ musicInfo.ar[0].name }}</div>
+            <div class="songDra">{{ formateTimeToString(Number(String(musicInfo.dt).slice(0, -3))) }}</div>
           </div>
         </template>
       </div>
@@ -54,12 +55,13 @@ const handleRefresh = () => {
 <style scoped lang="less">
 .playList {
   z-index: 100;
-  height: 100%;
+  height: calc(100% - 131px);
   width: 390px;
   background-color: #363636;
   color: whitesmoke;
-  position: absolute;
-  right: 25px;
+  position: fixed;
+  top: 61px;
+  right: 0px;
   display: flex;
   flex-direction: column;
 

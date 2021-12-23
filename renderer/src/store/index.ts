@@ -2,7 +2,7 @@ import useStorage from "@/hooks/useStorage";
 import { getMusicUrl, loginData, userLogin } from "@/service";
 import { createPinia } from "pinia";
 import { defineStore } from "pinia";
-import { musicInfo } from "./type";
+import { music } from "./type";
 const pinia = createPinia();
 export enum musicMode {
   SHUNXUBOFANG = "顺序播放",
@@ -10,13 +10,14 @@ export enum musicMode {
   DANQUXUNHUAN = "单曲循环",
   SUIJIBOFANG = "随机播放",
 }
+const { getStorage } = useStorage();
 export const mainStore = defineStore("main", {
   state: () => {
     return {
       name: "",
       id: 0,
-      musicLists: <musicInfo[]>[],
-      currentMusic: <musicInfo>{},
+      musicLists: <music[]>[],
+      currentMusic: <music>{},
       currentIndex: 0,
       avatarUrl: "",
     };
@@ -40,26 +41,16 @@ export const mainStore = defineStore("main", {
       this.name = getStorage("name");
     },
     initMusic() {
-      const { getStorage } = useStorage();
-      this.currentMusic = this.musicLists[0] ?? {};
-      this.currentIndex = 0;
+      this.currentIndex = getStorage("currentIndex") ?? 0;
+      this.currentMusic = this.musicLists[this.currentIndex] ?? {};
     },
     async initMusicLists() {
       const { getStorage } = useStorage();
-      const musicLists: musicInfo[] = getStorage("musicLists");
+      const musicLists: music[] = getStorage("musicLists");
       if (musicLists) {
-        const ids = musicLists.map((music) => music.songId);
-        const res: any = await getMusicUrl(ids.join(","));
-        //一次获取多首歌的 接口返回顺序混乱 需要分辨id
-        res.data.forEach((music: any) => {
-          const findItem = musicLists.find((item) => item.songId === music.id);
-          findItem!.songUrl = music.url;
-        });
-        if (musicLists) {
-          this.musicLists = musicLists;
-          this.currentMusic = this.musicLists[0];
-        }
+        this.musicLists = musicLists;
       }
+      this.initMusic();
     },
     changeToPrevious() {
       if (this.currentIndex === 0) {

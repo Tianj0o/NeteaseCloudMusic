@@ -50,6 +50,7 @@ defineExpose({
   flex-direction: column;
   align-items: center;
   padding: 30px 0px;
+  z-index: 100;
   .container {
     border: 1px solid rgb(216, 216, 216);
     width: 260px;

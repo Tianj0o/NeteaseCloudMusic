@@ -5,13 +5,17 @@ import { computed, ref } from '@vue/reactivity';
 import useStorage from '@/hooks/useStorage';
 import { nextTick } from '@vue/runtime-core';
 import musicList from './musicList.vue';
+import { watchEffect } from 'vue';
+import { getMusicUrl } from '@/service';
+import { useClickTwice } from '@/hooks/useClick';
 const store = mainStore()
-let currentMusic = computed(() => store.currentMusic)
-
+let currentMusic = computed(() => {
+  return store.currentMusic
+})
+const { setStorage } = useStorage()
 
 const musicLists = computed(() => {
   const musicLists = store.musicLists
-  const { setStorage } = useStorage()
   if (musicLists.length > 0) {
     setStorage('musicLists', musicLists)
   }
@@ -21,33 +25,46 @@ const isShow = ref(false)
 const handleMusicListClick = () => {
   isShow.value = !isShow.value
 }
-let tick = 0;
 const musicPlayerRef = ref<InstanceType<typeof musicPlayer>>()
+
+// 双击列表 
+const clickTwice = useClickTwice()
 const musicListItemClick = (index: number) => {
-  tick++
-  setTimeout(() => {
-    if (tick >= 2) {
-      console.log('shuangji')
-      store.changToindex(index);
+  clickTwice(() => {
+    store.changToindex(index);
+    nextTick(() => {
+      (musicPlayerRef.value as any).audioRef?.play();
+      (musicPlayerRef.value as any).musicState.isPlay = true
+    })
+  })
+}
+
+watchEffect(() => {
+  const music = store.currentMusic;
+
+  if (music && Object.keys(music).length !== 0 && !music.url) {
+    getMusicUrl(music.id + '').then(res => {
+      console.log('update')
+      music.url = res.data[0].url
       nextTick(() => {
         (musicPlayerRef.value as any).audioRef.play();
         (musicPlayerRef.value as any).musicState.isPlay = true
       })
-    }
-    tick = 0
-  }, 700)
-}
+    })
+  }
+  setStorage('currentIndex', store.currentIndex)
+})
 
 </script>
 <template>
   <div class="footer">
     <div class="music-info">
       <div class="music-image">
-        <img :src="currentMusic?.picUrl" />
+        <img :src="currentMusic?.al?.picUrl" />
       </div>
       <div class="song-info">
-        <div class="music-name">{{ currentMusic?.songName }}</div>
-        <div class="author">{{ currentMusic?.songAuthor }}</div>
+        <div class="music-name">{{ currentMusic?.name }}</div>
+        <div class="author">{{ currentMusic?.ar?.[0].name }}</div>
       </div>
     </div>
     <div class="music-player">

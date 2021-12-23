@@ -4,13 +4,8 @@ import musicList from './cpns/musicList.vue';
 import { getPlaylistAll, getPlaylistDetails } from "@/service/discoverMusic";
 import { useRoute } from 'vue-router';
 import { formatNumber } from '@/hooks/formatNumber'
-export interface music {
-  name: string,
-  id: number,
-  ar: { name: string }[],
-  dt: number,
-  al: { name: string }
-}
+import { music } from '@/store/type';
+
 const route = useRoute()
 const musicListdata: music[] = await getPlaylistAll(Number(route.params.id)).then(res => res.songs)
 const musiListDetails = await getPlaylistDetails(Number(route.params.id)).then(res => res.playlist)

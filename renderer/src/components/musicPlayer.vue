@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { mainStore, musicMode } from '@/store';
-import type { musicInfo } from '@/store/type';
+import type { music } from '@/store/type';
 import { reactive, ref } from '@vue/reactivity';
 import { nextTick } from '@vue/runtime-core';
 import { formateTimeToString } from '@/hooks/formatTime'
-const props = defineProps<{
-  currentMusic: musicInfo
+defineProps<{
+  currentMusic: music
 }>()
 
 const audioRef = ref<HTMLAudioElement>()
@@ -115,7 +115,7 @@ defineExpose({
 
 <template>
   <div style="height: 100%;" class="music-player">
-    <template v-if="currentMusic">
+    <template v-if="Object.keys(currentMusic).length !== 0">
       <div class="music-control">
         <div class="change-mode" @click="changeMode">
           <transition name="mode-pop">
@@ -147,7 +147,9 @@ defineExpose({
           <div ref="progressLineRef" class="progress-line"></div>
           <div @mousedown="handleMouseDown" class="point" :style="{ left: pointLeft }"></div>
         </div>
-        <div class="duration">{{ formateTimeToString(store.currentMusic?.songTime ?? 0) }}</div>
+        <div
+          class="duration"
+        >{{ formateTimeToString(Number((store.currentMusic?.dt + '').slice(0, -3)) ?? 0) }}</div>
       </div>
     </template>
     <template v-else>
@@ -184,7 +186,7 @@ defineExpose({
     ref="audioRef"
     @timeupdate="handleMusicPlaying"
     @ended="handleMusicEnded"
-    :src="currentMusic?.songUrl"
+    :src="currentMusic.url"
   ></audio>
 </template>
 
