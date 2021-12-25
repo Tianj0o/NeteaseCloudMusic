@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getSearchKeywords } from '@/service';
-import type { music } from '@/store/type'
 import musicList from '@/views/discoverMusic/cpns/musicList.vue';
+import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute()
@@ -9,14 +9,17 @@ const searchQuery = {
   limit: 100,
   offset: 0
 }
-const query = route.params.query
-const songResult = await getSearchKeywords(`${query}&limit=${searchQuery.limit}&offset=${searchQuery.offset}`,)
-
+let query = route.params.query
+let songResult = ref(await getSearchKeywords(`${query}&limit=${searchQuery.limit}&offset=${searchQuery.offset}`,))
+watch(() => route.params, async () => {
+  query = route.params.query
+  songResult.value = await getSearchKeywords(`${query}&limit=${searchQuery.limit}&offset=${searchQuery.offset}`,)
+})
 </script>
 
 <template>
   <div class="title">搜索结果</div>
-  <music-list :musiclists="songResult.result.songs"></music-list>
+  <music-list :musiclists="songResult"></music-list>
 </template>
 
 <style scoped>

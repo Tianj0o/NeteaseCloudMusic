@@ -29,7 +29,7 @@ const musicItemClick = (music: music, index: number) => {
       <div class="duration">时间</div>
     </div>
     <div class="music-table">
-      <template v-for="(music,index) in musiclists" :key="music.name">
+      <template v-for="(music,index) in musiclists" :key="music.id">
         <div
           class="music-item"
           @click="musicItemClick(music, index)"

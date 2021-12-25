@@ -8,7 +8,6 @@ interface searchResult {
 }
 const searchContent = ref('')
 let isActive = true
-const queryReslutLists = ref<searchResult[]>([])
 watch(searchContent, () => {
   isActive = true
 })

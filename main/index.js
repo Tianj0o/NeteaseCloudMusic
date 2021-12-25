@@ -20,7 +20,7 @@ app.on("ready", async () => {
   globalShortcut.register('Control+Shift+i', function () {
     win.webContents.openDevTools()
   })
-  await session.defaultSession.loadExtension(path.resolve(__dirname + '../../../devtools/ljjemllljcmogpfapbkkighbhhppjdbg/6.0.0.20_0'))
+  // await session.defaultSession.loadExtension(path.resolve(__dirname + '../../devtools/ljjemllljcmogpfapbkkighbhhppjdbg/6.0.0.20_0'))
   win.loadURL("http://localhost:3000/");
 });
 useMessage(win)

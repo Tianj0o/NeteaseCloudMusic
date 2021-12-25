@@ -35,7 +35,9 @@ export const getMusicDetails = (ids: string) => {
 
 // query keywords  limit  offset  type &
 export const getSearchKeywords = (query: string) => {
-  return request.get<{ result: { songs: music[] } }>({
-    url: `/cloudsearch?keywords=${query}`,
-  });
+  return request
+    .get<{ result: { songs: music[] } }>({
+      url: `/cloudsearch?keywords=${query}`,
+    })
+    .then((res) => res.result.songs);
 };
