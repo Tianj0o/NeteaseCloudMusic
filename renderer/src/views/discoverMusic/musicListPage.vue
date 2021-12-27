@@ -5,10 +5,19 @@ import { getPlaylistAll, getPlaylistDetails } from "@/service/discoverMusic";
 import { useRoute } from 'vue-router';
 import { formatNumber } from '@/hooks/formatNumber'
 import { music } from '@/store/type';
+import { ref, watch } from 'vue';
 
 const route = useRoute()
-const musicListdata: music[] = await getPlaylistAll(Number(route.params.id)).then(res => res.songs)
-const musiListDetails = await getPlaylistDetails(Number(route.params.id)).then(res => res.playlist)
+
+let musicListdata = ref<music[]>(await getPlaylistAll(Number(route.params.id)).then(res => res.songs))
+let musiListDetails = ref(await getPlaylistDetails(Number(route.params.id)).then(res => res.playlist))
+watch(() => route.params, async () => {
+  if (route.params?.id) {
+    musicListdata.value = await getPlaylistAll(Number(route.params.id)).then(res => res.songs)
+    musiListDetails.value = await getPlaylistDetails(Number(route.params.id)).then(res => res.playlist)
+  }
+
+})
 </script>
 
 

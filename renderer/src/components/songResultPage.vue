@@ -12,8 +12,10 @@ const searchQuery = {
 let query = route.params.query
 let songResult = ref(await getSearchKeywords(`${query}&limit=${searchQuery.limit}&offset=${searchQuery.offset}`,))
 watch(() => route.params, async () => {
-  query = route.params.query
-  songResult.value = await getSearchKeywords(`${query}&limit=${searchQuery.limit}&offset=${searchQuery.offset}`,)
+  if (route.params.query !== undefined) {
+    query = route.params.query
+    songResult.value = await getSearchKeywords(`${query}&limit=${searchQuery.limit}&offset=${searchQuery.offset}`,)
+  }
 })
 </script>
 

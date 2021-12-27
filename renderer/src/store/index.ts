@@ -1,5 +1,5 @@
 import useStorage from "@/hooks/useStorage";
-import { getMusicUrl, loginData, userLogin } from "@/service";
+import { loginData, userLogin } from "@/service";
 import { createPinia } from "pinia";
 import { defineStore } from "pinia";
 import { music } from "./type";

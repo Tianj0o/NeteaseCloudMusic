@@ -1,12 +1,14 @@
 import router from "@/router";
-import { disMusicStore } from "@/store/discoverMusic";
-let currentIndex = 0;
+import { useHisRoute } from "./useHistoryRoute";
+const { addHisRoute } = useHisRoute();
 export const useToPage = () => {
-  const handleMusiclistClick = (id: number, index?: number) => {
-    router.push(`/main/musicList/${id}`);
-    if (index !== undefined) {
-      currentIndex = index;
+  const handleMusiclistClick = (id: number) => {
+    // 每日推荐单独处理
+    if (id === 0) {
+      // router.push()
     }
+    addHisRoute(`/main/musicList/${id}`);
+    router.push(`/main/musicList/${id}`);
   };
 
   return {

@@ -3,6 +3,7 @@ interface menuItem {
   name: string;
   path: string;
 }
+let defaultPath: string = "";
 export const navMenuConfig: menuItem[] = [
   {
     name: "发现音乐",
@@ -73,7 +74,7 @@ const setUpDiscoverMusicFiles = () => {
   for (let index in discoverMusicfiles) {
     const path =
       "/main/" + index.split("/")[2] + "/" + index.split("/")[4].slice(0, -4);
-
+    if (!defaultPath) defaultPath = discoverMusicConfig[0].path;
     //判断是否有这个路由
     if (discoverMusicConfig.findIndex((item) => item.path === path) != -1) {
       router.addRoute("discoverMusic", {
@@ -86,4 +87,9 @@ const setUpDiscoverMusicFiles = () => {
 export function setupRouters() {
   setUpnavMenuRouters();
   setUpDiscoverMusicFiles();
+  router.beforeEach((to) => {
+    if (to.path === "/main/discoverMusic") {
+      return defaultPath;
+    }
+  });
 }

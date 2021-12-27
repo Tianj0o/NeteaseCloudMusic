@@ -27,7 +27,7 @@ const { handleMusiclistClick } = useToPage()
   <div class="person-recommend">
     <t-carousel :bannerLists="bannerlists"></t-carousel>
     <t-grid :columns="5" gap="20px">
-      <t-card name="每日歌曲推荐">
+      <t-card name="每日歌曲推荐" @click="handleMusiclistClick(0)">
         <div class="daily-songs" style="overflow: hidden;position: relative;">
           <img style="width: 100%;filter: blur(2px);" :src="firSongPicUrl" />
 
@@ -41,8 +41,8 @@ const { handleMusiclistClick } = useToPage()
           </div>
         </div>
       </t-card>
-      <template v-for="item,index in dailyPlaylist">
-        <t-card v-bind="item" @click="handleMusiclistClick(item.id, index)"></t-card>
+      <template v-for="item in dailyPlaylist">
+        <t-card v-bind="item" @click="handleMusiclistClick(item.id)"></t-card>
       </template>
     </t-grid>
   </div>

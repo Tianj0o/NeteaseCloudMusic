@@ -3,6 +3,7 @@ import searchMusic from './searchMusic.vue';
 import loginModal from './loginModal.vue';
 import { ref } from '@vue/reactivity';
 import { mainStore } from '@/store';
+import { useHisRoute } from '@/hooks/useHistoryRoute';
 const loginModalRef = ref<InstanceType<typeof loginModal>>()
 // const { ipcRenderer } = (window as any).require('electron');
 const handleLoginClick = () => {
@@ -18,6 +19,8 @@ const handleCloseWindow = () => {
   // ipcRenderer.send('winAction', 'close')
 }
 const store = mainStore()
+
+const { toLast, toNext } = useHisRoute()
 </script>
 
 <template>
@@ -28,8 +31,8 @@ const store = mainStore()
     </div>
     <div class="center flex">
       <div class="for-back flex">
-        <i class="icon iconfont icon-arrow-left-bold"></i>
-        <i class="icon iconfont icon-arrow-right-bold"></i>
+        <i class="icon iconfont icon-arrow-left-bold" @click="toLast"></i>
+        <i class="icon iconfont icon-arrow-right-bold" @click="toNext"></i>
       </div>
       <div class="search">
         <search-music></search-music>
