@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron main/index.js",
-    "dev": "cd renderer && vite",
+    "start": "concurrently \"cd renderer && vite\" \"electron main/index.js \"",
     "build": "cd renderer && vue-tsc --noEmit && vite build",
     "serve": "cd renderer &&vite preview"
   },
@@ -25,6 +24,7 @@
   "devDependencies": {
     "@types/node": "^16.11.11",
     "@vitejs/plugin-vue": "^1.9.3",
+    "concurrently": "^7.0.0",
     "less": "^4.1.2",
     "typescript": "^4.4.3",
     "vite": "^2.6.4",
