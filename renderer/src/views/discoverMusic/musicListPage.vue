@@ -6,17 +6,26 @@ import { useRoute } from 'vue-router';
 import { formatNumber } from '@/hooks/formatNumber'
 import { music } from '@/store/type';
 import { ref, watch } from 'vue';
+import { disMusicStore } from '@/store/discoverMusic';
 
 const route = useRoute()
-
-let musicListdata = ref<music[]>(await getPlaylistAll(Number(route.params.id)).then(res => res.songs))
-let musiListDetails = ref(await getPlaylistDetails(Number(route.params.id)).then(res => res.playlist))
+const store = disMusicStore()
+const id = route.params.id
+let musicListdata = ref<music[]>()
+let musiListDetails = ref()
 watch(() => route.params, async () => {
-  if (route.params?.id) {
-    musicListdata.value = await getPlaylistAll(Number(route.params.id)).then(res => res.songs)
-    musiListDetails.value = await getPlaylistDetails(Number(route.params.id)).then(res => res.playlist)
+  if (id) {
+    if (id === '0') {
+      musicListdata.value = store.daiyluMusic
+      musiListDetails.value = ''
+    } else {
+      musicListdata.value = await getPlaylistAll(Number(id)).then(res => res.songs)
+      musiListDetails.value = await getPlaylistDetails(Number(id)).then(res => res.playlist)
+    }
   }
 
+}, {
+  immediate: true,
 })
 </script>
 
@@ -51,7 +60,7 @@ watch(() => route.params, async () => {
         </div>
       </div>
     </div>
-    <music-list :musiclists="musicListdata"></music-list>
+    <music-list v-if="musicListdata" :musiclists="musicListdata"></music-list>
   </div>
 </template>
 

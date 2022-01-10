@@ -5,6 +5,7 @@ import {
 } from "@/service/discoverMusic";
 import useStorage from "@/hooks/useStorage";
 import { defineStore } from "pinia";
+import type { music } from "./type";
 export interface bannerData {
   imageUrl: string;
   targetId: number;
@@ -21,7 +22,7 @@ export const disMusicStore = defineStore("disMusic", {
     return {
       bannerListsData: <bannerData[]>[],
       dailyPlaylist: <playList[]>[], //每日推荐歌单
-      daiyluMusic: <playList[]>[], //每日推荐歌曲
+      daiyluMusic: <music[]>[], //每日推荐歌曲
     };
   },
   actions: {

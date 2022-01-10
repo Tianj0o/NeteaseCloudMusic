@@ -1,4 +1,4 @@
-const TIME_OUT = 3000;
+const TIME_OUT = 6000;
 let BASE_URL = "";
 if (process.env.NODE_ENV === "development") {
   BASE_URL = "http://localhost:8888";
