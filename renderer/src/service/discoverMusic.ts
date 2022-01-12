@@ -66,3 +66,23 @@ export const getPlaylistDetails = (id: number) => {
     url: `/playlist/detail?id=${id}`,
   });
 };
+
+// 获取用户喜欢音乐的列表
+//添加时间戳 防止缓存
+export const getUserLikelist = (id: number) => {
+  const time = Date.now();
+  return request.get<{ ids: number[] }>({
+    url: `/likelist?uid=${id}&timestamp=${time}`,
+  });
+};
+
+// 喜欢音乐
+//添加时间戳 防止缓存
+
+export const likeMusic = (id: string) => {
+  const time = Date.now();
+
+  return request.get({
+    url: `/like?id=${id}&timestamp=${time}`,
+  });
+};

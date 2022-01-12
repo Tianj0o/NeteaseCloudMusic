@@ -3,6 +3,8 @@ import type { music } from '@/store/type'
 import { formateTimeToString } from '@/hooks/formatTime'
 import { mainStore } from '@/store'
 import { useClickTwice } from '@/hooks/useClick'
+import { computed } from 'vue'
+import { likeMusic } from '@/service/discoverMusic'
 const props = defineProps<{
   musiclists: music[]
 }>()
@@ -10,13 +12,29 @@ const store = mainStore()
 
 const clickTwice = useClickTwice()
 
-
-const musicItemClick = (music: music, index: number) => {
-  clickTwice(() => {
-    store.musicLists = props.musiclists
-    store.changToindex(index)
-  })
+const userLikeLists = computed(() => store.userLikelists)
+const isLike = (id: number) => {
+  return userLikeLists.value.includes(id)
 }
+
+const handleLikeClick = async (id: number) => {
+  if (isLike(id)) {
+    await likeMusic(id + '&like=false')
+  } else {
+    await likeMusic(id + '')
+  }
+  await store.getUserLikelistData()
+}
+const musicItemClick = (index: number) => {
+  clickTwice(() => changPlayList(index))
+}
+function changPlayList(index: number, data?: music[]) {
+  store.musicLists = data ?? props.musiclists
+  store.changToindex(index)
+}
+defineExpose({
+  changPlayList
+})
 </script>
 
 <template>
@@ -32,12 +50,17 @@ const musicItemClick = (music: music, index: number) => {
       <template v-for="(music,index) in musiclists" :key="music.id">
         <div
           class="music-item"
-          @click="musicItemClick(music, index)"
+          @click="musicItemClick(index)"
           :class="{ 'special': index % 2 === 0 }"
         >
           <div style="width: 10px;margin-right: 10px;">{{ (index + '').padStart(2, '0') }}</div>
           <div class="handler">
-            <i class="icon iconfont icon-xihuan" style="margin-right: 5px;"></i>
+            <i
+              class="icon iconfont"
+              style="margin-right: 5px;"
+              :class="isLike(music.id) ? 'icon-xihuan1' : 'icon-xihuan'"
+              @click="handleLikeClick(music.id)"
+            ></i>
             <i class="icon iconfont icon-xiazai"></i>
           </div>
           <div class="name" style="color: #d1d1d1;font-size: 13px;">{{ music.name }}</div>
@@ -87,6 +110,9 @@ const musicItemClick = (music: music, index: number) => {
       background-color: #2e2e2e;
     }
   }
+}
+.icon-xihuan1 {
+  color: #ec4141;
 }
 .handler {
   width: 68px;

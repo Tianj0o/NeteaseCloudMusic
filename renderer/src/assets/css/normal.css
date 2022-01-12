@@ -17,3 +17,6 @@
 ::-webkit-scrollbar-corner {
   background: #f6f6f6;
 }
+* {
+  user-select: none;
+}

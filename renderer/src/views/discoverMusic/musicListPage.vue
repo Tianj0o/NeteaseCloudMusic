@@ -27,6 +27,12 @@ watch(() => route.params, async () => {
 }, {
   immediate: true,
 })
+
+const isFold = ref(true)
+const musiclistRef = ref<InstanceType<typeof musicList>>()
+const handlePlayAll = () => {
+  musiclistRef.value?.changPlayList(0, [...musicListdata.value ?? []])
+}
 </script>
 
 
@@ -39,8 +45,12 @@ watch(() => route.params, async () => {
       <div class="details">
         <div class="name">{{ musiListDetails.name }}</div>
 
-        <div class="share">
-          收藏:
+        <div class="share" style="display: flex;align-items: center;">
+          <div
+            class="playAllbtn"
+            @click="handlePlayAll"
+            style="padding: 0px 20px;margin:5px 10px 5px 0 ;background-color:#d73535;border-radius: 25px;"
+          >播放全部</div>收藏:
           <span class="number">{{ formatNumber(musiListDetails.subscribedCount) }}</span>
           分享:
           <span class="number">{{ formatNumber(musiListDetails.shareCount) }}</span>
@@ -54,13 +64,22 @@ watch(() => route.params, async () => {
           <span class="number">{{ formatNumber(musiListDetails.playCount) }}</span> 歌曲:
           <span class="number">{{ formatNumber(musiListDetails.trackCount) }}</span>
         </div>
-        <div class="description">
-          简介:
-          <span class="number">{{ musiListDetails.description }}</span>
+        <div
+          class="description"
+          :class="{ 'active': !isFold }"
+          style="display: flex;justify-content: space-between;"
+        >
+          <div style="white-space: nowrap;">简介:</div>
+          <span class="number" :class="{ 'active': !isFold }">{{ musiListDetails.description }}</span>
         </div>
       </div>
+      <i
+        class="iconbtn icon iconfont"
+        :class="isFold ? 'icon-shang' : 'icon-xia'"
+        @click="isFold = !isFold"
+      ></i>
     </div>
-    <music-list v-if="musicListdata" :musiclists="musicListdata"></music-list>
+    <music-list ref="musiclistRef" v-if="musicListdata" :musiclists="musicListdata"></music-list>
   </div>
 </template>
 
@@ -71,19 +90,40 @@ watch(() => route.params, async () => {
 
   .header {
     display: flex;
+    position: relative;
     .pic {
-      width: 200px;
+      min-width: 200px;
+    }
+    .iconbtn {
+      position: absolute;
+      top: 170px;
+      right: 0;
+      color: #878787;
     }
     .details {
-      max-width: 400px;
+      max-width: 800px;
       color: #d0d0d0;
       padding: 0 20px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      & > div {
+        height: 40px;
+        line-height: 40px;
+      }
       .number {
         color: #878787;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
+
+      .active {
+        height: auto;
+
+        white-space: normal;
+        overflow: initial;
+      }
+
       .name {
         font-size: 1.5rem;
         font-weight: 900;

@@ -1,5 +1,6 @@
 import useStorage from "@/hooks/useStorage";
 import { loginData, userLogin } from "@/service";
+import { getUserLikelist } from "@/service/discoverMusic";
 import { createPinia } from "pinia";
 import { defineStore } from "pinia";
 import { music } from "./type";
@@ -20,6 +21,7 @@ export const mainStore = defineStore("main", {
       currentMusic: <music>{},
       currentIndex: 0,
       avatarUrl: "",
+      userLikelists: <number[]>[],
     };
   },
   actions: {
@@ -112,10 +114,16 @@ export const mainStore = defineStore("main", {
       this.currentIndex = 0;
       this.currentMusic = null as any;
     },
+    //用户喜欢列表
+    async getUserLikelistData() {
+      const data = await getUserLikelist(this.id);
+      this.userLikelists = data.ids;
+    },
   },
 });
 export function setupStore() {
   mainStore().initMusicLists();
   mainStore().initLoginInfo();
+  mainStore().getUserLikelistData();
 }
 export default pinia;
