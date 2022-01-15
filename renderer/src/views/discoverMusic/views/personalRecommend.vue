@@ -28,8 +28,14 @@ const { handleMusiclistClick } = useToPage()
     <t-carousel :bannerLists="bannerlists"></t-carousel>
     <t-grid :columns="5" gap="20px">
       <t-card name="每日歌曲推荐" @click="handleMusiclistClick(0)">
-        <div class="daily-songs" style="overflow: hidden;position: relative;">
-          <img style="width: 100%;filter: blur(2px);" :src="firSongPicUrl" />
+        <div
+          class="daily-songs"
+          style="overflow: hidden;position: relative;height: 0;padding-bottom: 100%;"
+        >
+          <img
+            style="width: 100%;filter: blur(2px);position: absolute;height: 100%;"
+            :src="firSongPicUrl"
+          />
 
           <div
             class="icon"

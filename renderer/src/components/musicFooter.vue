@@ -5,7 +5,7 @@ import { computed, ref } from '@vue/reactivity';
 import useStorage from '@/hooks/useStorage';
 import { nextTick } from '@vue/runtime-core';
 import musicList from './musicList.vue';
-import { watchEffect } from 'vue';
+import { watch, watchEffect } from 'vue';
 import { getMusicUrl } from '@/service';
 import { useClickTwice } from '@/hooks/useClick';
 const store = mainStore()
@@ -38,22 +38,27 @@ const musicListItemClick = (index: number) => {
     })
   })
 }
-
+let isFirst = true
 watchEffect(() => {
   const music = store.currentMusic;
 
-  if (music && Object.keys(music).length !== 0 && !music.url) {
+  if (music && Object.keys(music).length !== 0) {
     getMusicUrl(music.id + '').then(res => {
       console.log('update')
       music.url = res.data[0].url
-      nextTick(() => {
-        (musicPlayerRef.value as any).audioRef.play();
-        (musicPlayerRef.value as any).musicState.isPlay = true
-      })
+      if (!isFirst) {
+        nextTick(() => {
+          (musicPlayerRef.value as any).audioRef?.play();
+          (musicPlayerRef.value as any).musicState.isPlay = true
+        })
+      } else {
+        isFirst = false
+      }
     })
   }
   setStorage('currentIndex', store.currentIndex)
 })
+
 
 </script>
 <template>
