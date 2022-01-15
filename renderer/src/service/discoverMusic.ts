@@ -86,3 +86,10 @@ export const likeMusic = (id: string) => {
     url: `/like?id=${id}&timestamp=${time}`,
   });
 };
+
+// 歌单排行榜
+export const getToplist = () => {
+  return request.get({
+    url: "/toplist",
+  });
+};
