@@ -5,6 +5,8 @@ import tCard from '@/components/tCard.vue';
 import tGrid from '@/components/tGrid.vue';
 import { getPlaylistAll } from '@/service/discoverMusic';
 import type { music } from '@/store/type';
+import playIcon from '@/components/iconsCpns/playIcon.vue'
+import { useToPage } from '@/hooks/useToPage';
 export interface topList {
   coverImgUrl: string,
   id: number,
@@ -26,7 +28,10 @@ async function getOfficialList() {
     OfficialList.value[index] = item.songs
   })
 }
-getOfficialList()
+await getOfficialList()
+
+const { handleMusiclistClick } = useToPage()
+
 </script>
 
 <template>
@@ -34,8 +39,13 @@ getOfficialList()
     <div class="title">官方榜</div>
     <template v-for="i in 4">
       <div class="container">
-        <div class="pic" style="width: 200px;">
+        <div
+          class="pic"
+          @click="handleMusiclistClick(topList[i - 1].id)"
+          style="width: 200px;position: relative;"
+        >
           <t-card :pic-url="topList[i - 1].coverImgUrl"></t-card>
+          <play-icon class="icon"></play-icon>
         </div>
         <div class="lists">
           <template v-for="(musicInfo,index) in OfficialList[i - 1]">
@@ -56,7 +66,15 @@ getOfficialList()
     <div class="title">全球榜</div>
     <t-grid :columns="5" gap="20px">
       <template v-for="item,index in topList">
-        <t-card v-if="index > 3" :pic-url="item.coverImgUrl"></t-card>
+        <div
+          @click="handleMusiclistClick(item.id)"
+          class="pic"
+          v-if="index > 3"
+          style="position: relative;"
+        >
+          <t-card :pic-url="item.coverImgUrl"></t-card>
+          <play-icon class="icon"></play-icon>
+        </div>
       </template>
     </t-grid>
   </div>
@@ -96,5 +114,18 @@ getOfficialList()
       background-color: #393939;
     }
   }
+}
+.pic:hover .icon {
+  opacity: 1;
+}
+.pic .icon {
+  opacity: 0;
+  color: rgb(43 43 43 / 70%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 50px;
+  transition: opacity 0.1s linear;
 }
 </style>

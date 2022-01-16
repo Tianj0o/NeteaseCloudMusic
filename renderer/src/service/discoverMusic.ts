@@ -12,7 +12,6 @@ export const getBannerData = () => {
 export const getDailyPlayList = () => {
   return request.get({
     url: "/recommend/resource",
-    // url: "/personalized/newsong",
   });
 };
 
@@ -24,7 +23,7 @@ export const getDailyMusic = () => {
   });
 };
 
-//每日推荐新歌单
+//每日推荐个人新歌单
 export const getNewMusiclist = () => {
   return request.get({
     url: "personalized/newsongm",
@@ -34,7 +33,7 @@ export const getNewMusiclist = () => {
 // 每日推荐新歌
 export const getNewMusic = () => {
   return request.get({
-    url: "/personalized/newsong",
+    url: "/personalized/newsong?limit=100",
   });
 };
 

@@ -55,7 +55,7 @@ const handlePlayAll = () => {
           分享:
           <span class="number">{{ formatNumber(musiListDetails.shareCount) }}</span>
         </div>
-        <div class="tag">
+        <div class="tag" v-if="musiListDetails.tags.length">
           标签:
           <span style="color: #85b9e6;">{{ musiListDetails.tags.join(',') }}</span>
         </div>
@@ -64,13 +64,13 @@ const handlePlayAll = () => {
           <span class="number">{{ formatNumber(musiListDetails.playCount) }}</span> 歌曲:
           <span class="number">{{ formatNumber(musiListDetails.trackCount) }}</span>
         </div>
-        <div
-          class="description"
-          :class="{ 'active': !isFold }"
-          style="display: flex;justify-content: space-between;"
-        >
+        <div class="description" :class="{ 'active': !isFold }" style="display: flex">
           <div style="white-space: nowrap;">简介:</div>
-          <span class="number" :class="{ 'active': !isFold }">{{ musiListDetails.description }}</span>
+          <span
+            class="number"
+            style="display: block;max-width: 50%;"
+            :class="{ 'active': !isFold }"
+          >{{ musiListDetails.description }}</span>
         </div>
       </div>
       <i
