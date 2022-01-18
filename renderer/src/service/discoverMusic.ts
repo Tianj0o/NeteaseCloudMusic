@@ -92,3 +92,24 @@ export const getToplist = () => {
     url: "/toplist",
   });
 };
+
+// 热门歌单分类
+export const getHotPlaylist = () => {
+  return request.get({
+    url: "/playlist/hot",
+  });
+};
+
+// 所有歌单分类
+export const getAllPlaylist = () => {
+  return request.get({
+    url: "/playlist/catlist",
+  });
+};
+
+//获取分类歌单 cat limit offset
+export const getTopPlaylist = (query?: string) => {
+  return request.get({
+    url: `top/playlist?${query}`,
+  });
+};
