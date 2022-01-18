@@ -10,7 +10,6 @@ const props = defineProps<{
 }>()
 const store = mainStore()
 
-const clickTwice = useClickTwice()
 
 const userLikeLists = computed(() => store.userLikelists)
 const isLike = (id: number) => {
@@ -25,9 +24,11 @@ const handleLikeClick = async (id: number) => {
   }
   await store.getUserLikelistData()
 }
-const musicItemClick = (index: number) => {
-  clickTwice(() => changPlayList(index))
-}
+
+const musicItemClick = useClickTwice((index: number) => {
+  console.log(index)
+  changPlayList(index)
+})
 function changPlayList(index: number, data?: music[]) {
   store.musicLists = data ?? props.musiclists
   store.changToindex(index)

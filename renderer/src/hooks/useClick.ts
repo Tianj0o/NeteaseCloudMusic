@@ -1,10 +1,11 @@
-export const useClickTwice = (time = 1000) => {
+export const useClickTwice = (fn: (args: any) => void, time = 1000) => {
   let tick = 0;
-  return function (callback: any) {
+  return function (this: any, ...args: any) {
     tick++;
-    setTimeout(async () => {
+    setTimeout(() => {
       if (tick >= 2) {
-        callback();
+        console.log(args);
+        fn.apply(this, args);
       }
       tick = 0;
     }, time);

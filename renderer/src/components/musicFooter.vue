@@ -28,16 +28,14 @@ const handleMusicListClick = () => {
 const musicPlayerRef = ref<InstanceType<typeof musicPlayer>>()
 
 // 双击列表 
-const clickTwice = useClickTwice()
-const musicListItemClick = (index: number) => {
-  clickTwice(() => {
-    store.changToindex(index);
-    nextTick(() => {
-      (musicPlayerRef.value as any).audioRef?.play();
-      (musicPlayerRef.value as any).musicState.isPlay = true
-    })
+const musicListItemClick = useClickTwice((index: number) => {
+  console.log(index)
+  store.changToindex(index);
+  nextTick(() => {
+    (musicPlayerRef.value as any).audioRef?.play();
+    (musicPlayerRef.value as any).musicState.isPlay = true
   })
-}
+})
 let isFirst = true
 watchEffect(() => {
   const music = store.currentMusic;
