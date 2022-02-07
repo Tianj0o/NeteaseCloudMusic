@@ -38,13 +38,14 @@ const handleCurrentChange = (index: number) => {
   pageSearchInfo.value.currentPage = index
   scrollToTop()
 }
+const emit = defineEmits(['handleScroll'])
 function scrollToTop() {
-  songlistRef.value && songlistRef.value.scrollTo(0, 0)
+  emit('handleScroll')
 }
 </script>
 
 <template>
-  <div class="songlist" ref="songlistRef" v-if="data">
+  <div class="songlist" v-if="data">
     <div class="header">
       <div class="current-tag">{{ currentTag }} ></div>
       <div class="hot-tags">
@@ -81,7 +82,6 @@ function scrollToTop() {
 
 <style scoped lang="less">
 .songlist {
-  height: 110%;
   overflow: scroll;
 }
 .header {

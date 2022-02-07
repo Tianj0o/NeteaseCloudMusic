@@ -113,3 +113,15 @@ export const getTopPlaylist = (query?: string) => {
     url: `top/playlist?${query}`,
   });
 };
+// 获取歌手信息
+export const getArtistlist = ({
+  type = -1,
+  area = -1,
+  initial = "-1",
+  limit = 30,
+  offset = 0,
+}) => {
+  return request.get({
+    url: `/artist/list?type=${type}&area=${area}&initial=${initial}&limit=${limit}&offset=${offset}`,
+  });
+};

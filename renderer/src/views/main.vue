@@ -2,6 +2,11 @@
 import footerVue from '@/components/musicFooter.vue';
 import navHeader from '@/components/navHeader.vue';
 import navMenu from '@/components/navMenu.vue';
+import { ref } from 'vue';
+const scrollRef = ref<HTMLElement>()
+const handleScroll = () => {
+  scrollRef.value!.scrollTo(0, 0)
+}
 </script>
 
 <template>
@@ -13,9 +18,9 @@ import navMenu from '@/components/navMenu.vue';
       <div class="menu">
         <nav-menu></nav-menu>
       </div>
-      <div class="body" id="container-body">
+      <div class="body" ref="scrollRef" id="container-body">
         <suspense>
-          <router-view></router-view>
+          <router-view @handleScroll="handleScroll"></router-view>
           <template #fallback>
             <div>Loading...</div>
           </template>
