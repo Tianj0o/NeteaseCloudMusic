@@ -3,7 +3,8 @@ import { getArtistlist } from '@/service/discoverMusic';
 import tCard from '@/components/tCard.vue';
 import tGrid from '@/components/tGrid.vue';
 import { ref, watchEffect } from 'vue';
-
+import { emitter } from '@/mitt';
+import { useDebounce } from '@/hooks/useDebounce';
 interface item {
   title: string,
   value: number
@@ -11,28 +12,38 @@ interface item {
 const areaList: item[] = [{ title: '全部', value: -1 }, { title: '华语', value: 7 }, { title: '欧美', value: 96 }, { title: '日本', value: 8 }, { title: '韩国', value: 16 }, { title: '其他', value: 0 }]
 const typeList: item[] = [{ title: '全部', value: -1 }, { title: '男歌手', value: 1 }, { title: '女歌手', value: 2 }, { title: '乐队组合', value: 3 }]
 const initialList = ['热门', 'A', 'B', "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"]
-const currentQueryConfig = ref({
+const defaultQueryConfig = {
   type: -1,
   area: -1,
   initial: '-1',
   offset: 0,
   limit: 30
-})
+}
+const currentQueryConfig = ref({ ...defaultQueryConfig })
 const handleItemClick = (item: item | string, type?: 'type' | 'area') => {
+  singerData.value = []
+
   if (typeof item === 'string') {
     if (item === '热门') item = '-1'
-    currentQueryConfig.value.initial = item
+    currentQueryConfig.value = { ...defaultQueryConfig, initial: item }
   } else {
     if (type) {
-      currentQueryConfig.value[type] = item.value
+      currentQueryConfig.value = { ...defaultQueryConfig, [type]: item.value }
     }
   }
+
 }
 const singerData = ref<{ picUrl: string, name: string }[]>([])
 watchEffect(async () => {
   const data = await getArtistlist({ ...currentQueryConfig.value })
-  singerData.value = data.artists
+  // singerData.value = data.artists
+  singerData.value = [...singerData.value, ...data.artists]
 })
+emitter.on("scrollToBottom", () => {
+  currentQueryConfig.value.offset += currentQueryConfig.value.limit
+});
+
+
 </script>
 
 <template>

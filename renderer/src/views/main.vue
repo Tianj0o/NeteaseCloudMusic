@@ -3,10 +3,21 @@ import footerVue from '@/components/musicFooter.vue';
 import navHeader from '@/components/navHeader.vue';
 import navMenu from '@/components/navMenu.vue';
 import { ref } from 'vue';
+import { emitter } from '@/mitt';
+import { useDebounce } from '@/hooks/useDebounce';
 const scrollRef = ref<HTMLElement>()
 const handleScroll = () => {
   scrollRef.value!.scrollTo(0, 0)
 }
+
+
+const handleBodyScroll = useDebounce(() => {
+  const isArrive = scrollRef.value!.scrollHeight - scrollRef.value!.scrollTop > scrollRef.value!.clientHeight * 1.4 ? false : true
+  if (isArrive) {
+    console.log('chufa')
+    emitter.emit('scrollToBottom')
+  }
+}, 1000)
 </script>
 
 <template>
@@ -18,7 +29,7 @@ const handleScroll = () => {
       <div class="menu">
         <nav-menu></nav-menu>
       </div>
-      <div class="body" ref="scrollRef" id="container-body">
+      <div class="body" ref="scrollRef" @scroll="handleBodyScroll" id="container-body">
         <suspense>
           <router-view @handleScroll="handleScroll"></router-view>
           <template #fallback>
