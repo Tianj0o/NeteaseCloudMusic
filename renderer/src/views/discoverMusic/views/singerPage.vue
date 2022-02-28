@@ -34,13 +34,18 @@ const handleItemClick = (item: item | string, type?: 'type' | 'area') => {
 
 }
 const singerData = ref<{ picUrl: string, name: string }[]>([])
+let isComplete = false
 watchEffect(async () => {
+  isComplete = true
   const data = await getArtistlist({ ...currentQueryConfig.value })
-  // singerData.value = data.artists
+  isComplete = false
   singerData.value = [...singerData.value, ...data.artists]
 })
 emitter.on("scrollToBottom", () => {
-  currentQueryConfig.value.offset += currentQueryConfig.value.limit
+  if (!isComplete) {
+    console.log('++++++++')
+    currentQueryConfig.value.offset += currentQueryConfig.value.limit
+  }
 });
 
 

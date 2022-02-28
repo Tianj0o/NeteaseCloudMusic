@@ -11,13 +11,12 @@ const handleScroll = () => {
 }
 
 
-const handleBodyScroll = useDebounce(() => {
+const handleBodyScroll = () => {
   const isArrive = scrollRef.value!.scrollHeight - scrollRef.value!.scrollTop > scrollRef.value!.clientHeight * 1.4 ? false : true
   if (isArrive) {
-    console.log('chufa')
     emitter.emit('scrollToBottom')
   }
-}, 1000)
+}
 </script>
 
 <template>
