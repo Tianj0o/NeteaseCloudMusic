@@ -4,7 +4,6 @@ import tCard from '@/components/tCard.vue';
 import tGrid from '@/components/tGrid.vue';
 import { ref, watchEffect } from 'vue';
 import { emitter } from '@/mitt';
-import { useDebounce } from '@/hooks/useDebounce';
 interface item {
   title: string,
   value: number

@@ -125,3 +125,9 @@ export const getArtistlist = ({
     url: `/artist/list?type=${type}&area=${area}&initial=${initial}&limit=${limit}&offset=${offset}`,
   });
 };
+
+export const getXinGeSudi = (type = 0) => {
+  return request.get({
+    url: `/top/song?type=${type}`,
+  });
+};
