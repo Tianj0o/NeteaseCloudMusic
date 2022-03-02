@@ -131,3 +131,14 @@ export const getXinGeSudi = (type = 0) => {
     url: `/top/song?type=${type}`,
   });
 };
+
+// query 获取上一页最后一个歌单的 updatetime 来获取下一页的数据
+export const getHighqualityPlaylist = ({ before }: { before: string }) => {
+  let content = "";
+  if (before) {
+    content = `before=${before}`;
+  }
+  return request.get({
+    url: `/top/playlist/highquality?${content}`,
+  });
+};

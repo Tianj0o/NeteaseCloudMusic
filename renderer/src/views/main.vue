@@ -4,19 +4,18 @@ import navHeader from '@/components/navHeader.vue';
 import navMenu from '@/components/navMenu.vue';
 import { ref } from 'vue';
 import { emitter } from '@/mitt';
-import { useDebounce } from '@/hooks/useDebounce';
+import { useThrottle } from '@/hooks/useThrottle';
 const scrollRef = ref<HTMLElement>()
-const handleScroll = () => {
+
+emitter.on('scrollToTop', () => {
   scrollRef.value!.scrollTo(0, 0)
-}
-
-
-const handleBodyScroll = () => {
+})
+const handleBodyScroll = useThrottle(() => {
   const isArrive = scrollRef.value!.scrollHeight - scrollRef.value!.scrollTop > scrollRef.value!.clientHeight * 1.4 ? false : true
   if (isArrive) {
     emitter.emit('scrollToBottom')
   }
-}
+}, 1000)
 </script>
 
 <template>
@@ -30,7 +29,7 @@ const handleBodyScroll = () => {
       </div>
       <div class="body" ref="scrollRef" @scroll="handleBodyScroll" id="container-body">
         <suspense>
-          <router-view @handleScroll="handleScroll"></router-view>
+          <router-view></router-view>
           <template #fallback>
             <div>Loading...</div>
           </template>

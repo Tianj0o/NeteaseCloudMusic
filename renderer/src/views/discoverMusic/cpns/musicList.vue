@@ -48,7 +48,7 @@ defineExpose({
       <div class="duration">时间</div>
     </div>
     <div class="music-table">
-      <template v-for="(music,index) in musiclists" :key="music.id">
+      <template v-for="(music, index) in musiclists" :key="music.id">
         <div
           class="music-item"
           @click="musicItemClick(index)"
@@ -76,7 +76,7 @@ defineExpose({
 
 <style scoped lang="less">
 .music-list {
-  color: #888888;
+  color: #2b2b2b;
   margin: 0 -20px;
   .title {
     display: flex;
@@ -101,14 +101,14 @@ defineExpose({
       line-height: 33px;
       padding-left: 20px;
       &:hover {
-        background-color: #373737;
+        background-color: #373737 !important;
+      }
+      &.special {
+        background-color: #2e2e2e;
       }
       div {
         padding-left: 3px;
       }
-    }
-    .music-item.special {
-      background-color: #2e2e2e;
     }
   }
 }

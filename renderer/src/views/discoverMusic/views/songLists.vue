@@ -5,6 +5,7 @@ import tPagination from '@/components/tPagination.vue';
 import { getAllPlaylist, getHotPlaylist, getTopPlaylist } from '@/service/discoverMusic';
 import { reactive, ref, watchEffect } from 'vue';
 import { useToPage } from '@/hooks/useToPage';
+import { emitter } from '@/mitt';
 const playlistCat = reactive<{ alllist: { categories: any, sub: { name: string, category: number }[] }, hotlist: { name: string }[] }>({
   hotlist: <any>{},
   alllist: <any>{}
@@ -38,9 +39,8 @@ const handleCurrentChange = (index: number) => {
   pageSearchInfo.value.currentPage = index
   scrollToTop()
 }
-const emit = defineEmits(['handleScroll'])
 function scrollToTop() {
-  emit('handleScroll')
+  emitter.emit('scrollToTop')
 }
 </script>
 

@@ -32,7 +32,6 @@ const handleItemClick = async (type: number) => {
 watchEffect(async () => {
   const data = await getXinGeSudi(currentQueryConfig.value).then(res => res.data)
   musiclist.value = data
-  console.log(musiclist.value)
 })
 </script>
 

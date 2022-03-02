@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import { discoverMusicConfig } from '@/config';
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter()
-const emit = defineEmits(['handleScroll'])
-const handleScroll = () => {
-  emit('handleScroll')
-}
+
 </script>
 
 <template>
@@ -19,7 +15,7 @@ const handleScroll = () => {
     <div class="container">
       <router-view v-slot="{ Component }">
         <keep-alive>
-          <component :is="Component" @handleScroll="handleScroll" />
+          <component :is="Component" />
         </keep-alive>
       </router-view>
     </div>
