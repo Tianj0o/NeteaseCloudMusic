@@ -15,7 +15,8 @@ let musicListdata = ref<music[]>()
 let musiListDetails = ref()
 watch(() => route.params, async () => {
   if (id) {
-    if (id === '0') {
+    if (id == '0') {
+
       musicListdata.value = store.daiyluMusic
       musiListDetails.value = ''
     } else {

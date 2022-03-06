@@ -16,6 +16,7 @@ const handleBodyScroll = useThrottle(() => {
     emitter.emit('scrollToBottom')
   }
 }, 1000)
+
 </script>
 
 <template>

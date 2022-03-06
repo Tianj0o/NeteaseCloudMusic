@@ -46,7 +46,7 @@ export const getMusiclistHot = () => {
 
 // 歌单
 ///top/playlist query ?limit=10 & order=new or hot  & cat 分类 华语
-export const getMusicListHotData = (query: string) => {
+export const getMusicListHotData = (query?: string) => {
   return request.get({
     url: `/top/playlist?${query}`,
   });

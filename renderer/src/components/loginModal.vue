@@ -10,6 +10,7 @@ const loginState = reactive({
 })
 const handleSubmitClick = () => {
   store.loginAction(loginState)
+  isShowLogin.value = false
 }
 
 defineExpose({
@@ -42,7 +43,7 @@ defineExpose({
   width: 300px;
   height: 160px;
   background-color: #fff;
-  opacity: 0.8;
+  border-radius: 20px;
   position: absolute;
   top: calc(50% - 80px);
   left: calc(50% - 150px);

@@ -9,6 +9,9 @@ const loginModalRef = ref<InstanceType<typeof loginModal>>()
 const handleLoginClick = () => {
   (loginModalRef.value as any).isShowLogin = !(loginModalRef.value as any).isShowLogin
 }
+const handleLoginOutClick = () => {
+  mainStore().userLoginOut()
+}
 const handleMinWindow = () => {
   // ipcRenderer.send('winAction', 'min')
 }
@@ -42,7 +45,12 @@ const { toLast, toNext } = useHisRoute()
       <div class="info flex">
         <img :src="store.avatarUrl ?? ''" />
         <div class="name">{{ store.name }}</div>
-        <div @click="handleLoginClick">未登录</div>
+        <div v-if="store.login === false" @click="handleLoginClick">登录</div>
+        <div
+          v-else
+          style="margin-left: 5px;font-weight: bold;color: #b82525;"
+          @click="handleLoginOutClick"
+        >退出登录</div>
         <login-modal ref="loginModalRef"></login-modal>
       </div>
       <div class="setting flex">

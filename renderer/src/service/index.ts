@@ -41,3 +41,17 @@ export const getSearchKeywords = (query: string) => {
     })
     .then((res) => res.result.songs);
 };
+// 判断是否登录
+export const isLogin = () => {
+  return request.get({
+    url: "/login/status",
+  });
+};
+
+// 退出登录
+
+export const loginOut = () => {
+  return request.post({
+    url: "/logout",
+  });
+};

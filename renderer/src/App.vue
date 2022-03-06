@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { mainStore } from './store';
+import { loginOut } from '@/service/index'
+const store = mainStore()
+store.isUserLogin()
+
 </script>
 
 <template>

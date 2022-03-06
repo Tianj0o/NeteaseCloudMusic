@@ -1,14 +1,24 @@
 <script setup lang="ts">
 import { navMenuConfig } from '@/config';
-import { computed } from 'vue';
+import useStorage from '@/hooks/useStorage';
+import { computed, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter()
 const route = useRoute()
 
-const currentRoute = computed(() => {
-  return route.path.match(/\/main\/\w+/)?.[0]
-})
+// const currentRoute = computed(() => {
+//   return route.path.match(/\/main\/\w+/)?.[0]
+// })
+const { getStorage, setStorage } = useStorage()
+
+let currentRoute = ref(getStorage('currentMenu') ?? navMenuConfig[0].path)
+const handleMenuClick = (path: string) => {
+  currentRoute.value = path
+  setStorage('currentMenu', path)
+  router.push(path)
+}
+
 
 </script>
 
@@ -17,7 +27,7 @@ const currentRoute = computed(() => {
     <div class="system">
       <template v-for="item in navMenuConfig" :key="item.path">
         <div
-          @click="router.push(item.path)"
+          @click="handleMenuClick(item.path)"
           class="sysytem-item"
           :class="{ 'active': currentRoute === item.path }"
         >{{ item.name }}</div>
