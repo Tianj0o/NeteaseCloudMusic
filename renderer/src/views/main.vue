@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import footerVue from '@/components/musicFooter.vue';
-import navHeader from '@/components/navHeader.vue';
-import navMenu from '@/components/navMenu.vue';
+import footerVue from '@/components/baseUi/musicFooter.vue';
+import navHeader from '@/components/baseUi/navHeader.vue';
+import navMenu from '@/components/baseUi/navMenu.vue';
 import { ref } from 'vue';
 import { emitter } from '@/mitt';
 import { useThrottle } from '@/hooks/useThrottle';

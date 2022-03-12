@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import searchMusic from './searchMusic.vue';
-import loginModal from './loginModal.vue';
+import searchMusic from '../main/searchMusic.vue';
+import loginModal from '../login/loginModal.vue';
 import { ref } from '@vue/reactivity';
 import { mainStore } from '@/store';
 import { useHisRoute } from '@/hooks/useHistoryRoute';
 const loginModalRef = ref<InstanceType<typeof loginModal>>()
 // const { ipcRenderer } = (window as any).require('electron');
 const handleLoginClick = () => {
-  (loginModalRef.value as any).isShowLogin = !(loginModalRef.value as any).isShowLogin
+  if (loginModalRef.value)
+    loginModalRef.value.isShowLogin = !loginModalRef.value.isShowLogin
 }
 const handleLoginOutClick = () => {
   mainStore().userLoginOut()

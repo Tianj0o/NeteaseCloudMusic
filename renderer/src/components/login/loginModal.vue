@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { mainStore } from '@/store';
 import { reactive, ref } from '@vue/reactivity';
-import dialogTelport from './dialogTelport.vue';
+import dialogTelport from '../baseUi/dialogTelport.vue';
 const store = mainStore()
 const isShowLogin = ref(false)
 const loginState = reactive({

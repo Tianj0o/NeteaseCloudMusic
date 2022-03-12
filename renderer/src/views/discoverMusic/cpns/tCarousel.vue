@@ -34,7 +34,7 @@ const handleChange = (type: string) => {
   else if (type === 'last')
     activeIndex.value === 0 ? activeIndex.value = props.bannerLists.length - 1 : activeIndex.value--
 }
-let timer: number
+let timer: any
 onMounted(() => {
   timer = setInterval(() => {
     handleChange('next')
@@ -63,12 +63,12 @@ const handleCircleClick = (index: number) => {
       <i class="icon iconfont icon-arrow-right-bold"></i>
     </div>
     <transition-group tag="div" class="carouselLists">
-      <template v-for="(item,index) in bannerLists" :key="index">
+      <template v-for="(item, index) in bannerLists" :key="index">
         <img :class="addClass(index)" :src="item.imageUrl" />
       </template>
     </transition-group>
     <div class="circle">
-      <template v-for="(item,index) in bannerLists">
+      <template v-for="(item, index) in bannerLists">
         <div
           class="circle-item"
           :class="{ 'active': addClass(index) === 'active' }"

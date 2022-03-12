@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import tGrid from '@/components/tGrid.vue';
-import tCard from '@/components/tCard.vue';
-import tPagination from '@/components/tPagination.vue';
+import tGrid from '@/components/baseUi/tGrid.vue';
+import tCard from '@/components/baseUi/tCard.vue';
+import tPagination from '@/components/baseUi/tPagination.vue';
 import { getAllPlaylist, getHotPlaylist, getTopPlaylist } from '@/service/discoverMusic';
 import { reactive, ref, watchEffect } from 'vue';
 import { useToPage } from '@/hooks/useToPage';

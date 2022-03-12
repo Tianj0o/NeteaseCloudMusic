@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import tCard from '@/components/tCard.vue';
+import tCard from '@/components/baseUi/tCard.vue';
 import musicList from './cpns/musicList.vue';
 import { getPlaylistAll, getPlaylistDetails } from "@/service/discoverMusic";
 import { useRoute } from 'vue-router';
@@ -32,7 +32,8 @@ watch(() => route.params, async () => {
 const isFold = ref(true)
 const musiclistRef = ref<InstanceType<typeof musicList>>()
 const handlePlayAll = () => {
-  musiclistRef.value?.changPlayList(0, [...musicListdata.value ?? []])
+  if (musiclistRef.value)
+    musiclistRef.value.changPlayList(0, [...musicListdata.value ?? []])
 }
 </script>
 

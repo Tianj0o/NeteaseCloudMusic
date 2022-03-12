@@ -16,7 +16,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: "/main/songResultPage/:query",
-        component: () => import("@/components/songResultPage.vue"),
+        component: () => import("@/components/main/songResultPage.vue"),
       },
     ],
   },

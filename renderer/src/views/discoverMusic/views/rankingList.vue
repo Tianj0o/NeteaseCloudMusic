@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { getToplist } from '@/service/discoverMusic';
 import { ref } from 'vue';
-import tCard from '@/components/tCard.vue';
-import tGrid from '@/components/tGrid.vue';
+import tCard from '@/components/baseUi/tCard.vue';
+import tGrid from '@/components/baseUi/tGrid.vue';
 import { getPlaylistAll } from '@/service/discoverMusic';
 import type { music } from '@/store/type';
 import playIcon from '@/components/iconsCpns/playIcon.vue'
@@ -48,7 +48,7 @@ const { handleMusiclistClick } = useToPage()
           <play-icon class="icon"></play-icon>
         </div>
         <div class="lists">
-          <template v-for="(musicInfo,index) in OfficialList[i - 1]">
+          <template v-for="(musicInfo, index) in OfficialList[i - 1]">
             <div class="list" v-if="index < 5" :class="index % 2 === 0 ? '' : 'special'">
               <div class="songName" style="color:#d2d2d2;">
                 <span :style="index > 2 ? '#666666' : 'color:#a63333'">{{ index }}</span>
@@ -65,7 +65,7 @@ const { handleMusiclistClick } = useToPage()
   <div>
     <div class="title">全球榜</div>
     <t-grid :columns="5" gap="20px">
-      <template v-for="item,index in topList">
+      <template v-for="item, index in topList">
         <div
           @click="handleMusiclistClick(item.id)"
           class="pic"

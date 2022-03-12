@@ -34,7 +34,7 @@ const setUpnavMenuRouters = () => {
     if (navMenuConfig.findIndex((item) => item.path === path) != -1) {
       router.addRoute("main", {
         name: index.split("/")[2],
-        component: (navMenufiles as any)[index],
+        component: navMenufiles[index],
         path: "/main/" + index.split("/")[2],
       });
     }
@@ -77,6 +77,7 @@ const setUpDiscoverMusicFiles = () => {
     if (!defaultPath) defaultPath = discoverMusicConfig[0].path;
     //判断是否有这个路由
     if (discoverMusicConfig.findIndex((item) => item.path === path) != -1) {
+      // console.log((discoverMusicfiles as any)[index]);
       router.addRoute("discoverMusic", {
         component: (discoverMusicfiles as any)[index],
         path,

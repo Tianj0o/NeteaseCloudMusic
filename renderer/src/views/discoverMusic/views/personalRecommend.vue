@@ -2,8 +2,8 @@
 import { disMusicStore } from '@/store/discoverMusic';
 import { computed } from 'vue';
 import tCarousel from '../cpns/tCarousel.vue';
-import TCard from '@/components/tCard.vue';
-import tGrid from '@/components/tGrid.vue';
+import TCard from '@/components/baseUi/tCard.vue';
+import tGrid from '@/components/baseUi/tGrid.vue';
 import { useToPage } from '@/hooks/useToPage';
 const store = disMusicStore()
 

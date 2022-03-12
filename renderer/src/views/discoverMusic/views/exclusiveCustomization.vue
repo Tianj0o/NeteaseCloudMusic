@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getHighqualityPlaylist } from '@/service/discoverMusic';
-import tGrid from '@/components/tGrid.vue';
-import tCard from '@/components/tCard.vue';
+import tGrid from '@/components/baseUi/tGrid.vue';
+import tCard from '@/components/baseUi/tCard.vue';
 import { useToPage } from '@/hooks/useToPage';
 import { ref, watchEffect } from '@vue/runtime-dom';
 import { emitter } from '@/mitt';

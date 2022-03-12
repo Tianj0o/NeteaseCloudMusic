@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import musicPlayer from './musicPlayer.vue'
+import musicPlayer from '../musicPlayer/musicPlayer.vue'
 import { mainStore } from '@/store';
 import { computed, ref } from '@vue/reactivity';
 import useStorage from '@/hooks/useStorage';
 import { nextTick } from '@vue/runtime-core';
-import musicList from './musicList.vue';
-import { watch, watchEffect } from 'vue';
+import musicList from '../main/musicList.vue';
+import { watchEffect } from 'vue';
 import { getMusicUrl } from '@/service';
 import { useClickTwice } from '@/hooks/useClick';
 const store = mainStore()
@@ -32,8 +32,10 @@ const musicListItemClick = useClickTwice((index: number) => {
   console.log(index)
   store.changToindex(index);
   nextTick(() => {
-    (musicPlayerRef.value as any).audioRef?.play();
-    (musicPlayerRef.value as any).musicState.isPlay = true
+    if (musicPlayerRef.value) {
+      musicPlayerRef.value.audioRef?.play();
+      musicPlayerRef.value.musicState.isPlay = true
+    }
   })
 })
 let isFirst = true

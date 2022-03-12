@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // import { musicInfo } from '@/store/type';
-import dialogTelport from './dialogTelport.vue';
+import dialogTelport from '@/components/baseUi/dialogTelport.vue';
 import { mainStore } from '@/store';
 import useStorage from '@/hooks/useStorage';
 import { formateTimeToString } from '@/hooks/formatTime'
@@ -36,7 +36,7 @@ const handleRefresh = () => {
         </div>
       </div>
       <div class="lists">
-        <template v-for="(musicInfo,index) in musicLists">
+        <template v-for="(musicInfo, index) in musicLists">
           <div
             @click="musicListItemClick(index)"
             class="list"
@@ -44,7 +44,9 @@ const handleRefresh = () => {
           >
             <div class="songName">{{ musicInfo.name }}</div>
             <div class="songAuther">{{ musicInfo.ar[0].name }}</div>
-            <div class="songDra">{{ formateTimeToString(Number(String(musicInfo.dt).slice(0, -3))) }}</div>
+            <div
+              class="songDra"
+            >{{ formateTimeToString(Number(String(musicInfo.dt).slice(0, -3))) }}</div>
           </div>
         </template>
       </div>

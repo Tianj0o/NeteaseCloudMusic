@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getArtistlist } from '@/service/discoverMusic';
-import tCard from '@/components/tCard.vue';
-import tGrid from '@/components/tGrid.vue';
+import tCard from '@/components/baseUi/tCard.vue';
+import tGrid from '@/components/baseUi/tGrid.vue';
 import { ref, watchEffect } from 'vue';
 import { emitter } from '@/mitt';
 interface item {
