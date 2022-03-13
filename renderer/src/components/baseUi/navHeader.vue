@@ -3,7 +3,8 @@ import searchMusic from '../main/searchMusic.vue';
 import loginModal from '../login/loginModal.vue';
 import { ref } from '@vue/reactivity';
 import { mainStore } from '@/store';
-import { useHisRoute } from '@/hooks/useHistoryRoute';
+import { useRouterToHistory } from '@/hooks/useHistoryRoute';
+import router from '@/router';
 const loginModalRef = ref<InstanceType<typeof loginModal>>()
 // const { ipcRenderer } = (window as any).require('electron');
 const handleLoginClick = () => {
@@ -23,8 +24,8 @@ const handleCloseWindow = () => {
   // ipcRenderer.send('winAction', 'close')
 }
 const store = mainStore()
+const { goBack, goFor, getLength } = useRouterToHistory()
 
-const { toLast, toNext } = useHisRoute()
 </script>
 
 <template>
@@ -35,8 +36,17 @@ const { toLast, toNext } = useHisRoute()
     </div>
     <div class="center flex">
       <div class="for-back flex">
-        <i class="icon iconfont icon-arrow-left-bold" @click="toLast"></i>
-        <i class="icon iconfont icon-arrow-right-bold" @click="toNext"></i>
+        <i
+          class="icon iconfont icon-arrow-left-bold"
+          :class="{ 'empty': getLength('back').value.length === 0 }"
+          @click="goBack"
+        ></i>
+        {{ getLength('back').value.length + '||' + getLength('for').value.length }}}
+        <i
+          class="icon iconfont icon-arrow-right-bold"
+          :class="{ 'empty': getLength('for').value.length === 0 }"
+          @click="goFor"
+        ></i>
       </div>
       <div class="search">
         <search-music></search-music>
@@ -127,5 +137,8 @@ const { toLast, toNext } = useHisRoute()
 .search,
 .info {
   -webkit-app-region: no-drag;
+}
+.empty {
+  opacity: 0.5;
 }
 </style>

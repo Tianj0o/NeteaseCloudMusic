@@ -5,6 +5,7 @@ import navMenu from '@/components/baseUi/navMenu.vue';
 import { ref } from 'vue';
 import { emitter } from '@/mitt';
 import { useThrottle } from '@/hooks/useThrottle';
+import { useRouter } from 'vue-router';
 const scrollRef = ref<HTMLElement>()
 
 emitter.on('scrollToTop', () => {
@@ -16,7 +17,10 @@ const handleBodyScroll = useThrottle(() => {
     emitter.emit('scrollToBottom')
   }
 }, 1000)
-
+const router = useRouter()
+emitter.on('historyRoute', (e: any) => {
+  router.push(e)
+})
 </script>
 
 <template>
