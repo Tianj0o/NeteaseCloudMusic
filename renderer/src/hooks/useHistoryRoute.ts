@@ -5,34 +5,34 @@ import { emitter } from "@/mitt";
 const MAX_CACHE = 10;
 const forwradList = ref<RouteLocationNormalized[]>([]),
   backwardList = ref<RouteLocationNormalized[]>([]);
-const router = useRouter();
 
 export function useRouterToHistory() {
   return {
     addForward(route: RouteLocationNormalized) {
+      route.meta.isHistory = true;
       forwradList.value.push(route);
     },
     addBackwradList(route: RouteLocationNormalized) {
       if (backwardList.value.length == 0) {
         forwradList.value.length = 0;
       }
+      route.meta.isHistory = true;
       backwardList.value.push(route);
-      console.log(backwardList.value);
     },
     // 后退
-    goBack() {
+    goBack(currentRoute: RouteLocationNormalized) {
+      forwradList.value.push(currentRoute);
       const current = backwardList.value.pop();
       if (current) {
-        forwradList.value.push(current);
-        emitter.emit("historyRoute", current.fullPath);
+        emitter.emit("historyRoute", current);
       }
     },
     // 前进
-    goFor() {
+    goFor(currentRoute: RouteLocationNormalized) {
+      backwardList.value.push(currentRoute);
       const current = forwradList.value.pop();
       if (current) {
-        backwardList.value.push(current);
-        emitter.emit("historyRoute", current.fullPath);
+        emitter.emit("historyRoute", current);
       }
     },
     getLength(type: "back" | "for") {

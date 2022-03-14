@@ -4,7 +4,7 @@ import loginModal from '../login/loginModal.vue';
 import { ref } from '@vue/reactivity';
 import { mainStore } from '@/store';
 import { useRouterToHistory } from '@/hooks/useHistoryRoute';
-import router from '@/router';
+import { useRoute } from 'vue-router';
 const loginModalRef = ref<InstanceType<typeof loginModal>>()
 // const { ipcRenderer } = (window as any).require('electron');
 const handleLoginClick = () => {
@@ -25,7 +25,11 @@ const handleCloseWindow = () => {
 }
 const store = mainStore()
 const { goBack, goFor, getLength } = useRouterToHistory()
-
+const route = useRoute()
+function handleForward(type: 'for' | 'back') {
+  if (getLength(type).value.length === 0) return
+  type === 'for' ? goFor({ ...route }) : goBack({ ...route })
+}
 </script>
 
 <template>
@@ -39,13 +43,12 @@ const { goBack, goFor, getLength } = useRouterToHistory()
         <i
           class="icon iconfont icon-arrow-left-bold"
           :class="{ 'empty': getLength('back').value.length === 0 }"
-          @click="goBack"
+          @click="handleForward('back')"
         ></i>
-        {{ getLength('back').value.length + '||' + getLength('for').value.length }}}
         <i
           class="icon iconfont icon-arrow-right-bold"
           :class="{ 'empty': getLength('for').value.length === 0 }"
-          @click="goFor"
+          @click="handleForward('for')"
         ></i>
       </div>
       <div class="search">

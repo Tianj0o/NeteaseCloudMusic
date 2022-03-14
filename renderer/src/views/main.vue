@@ -19,6 +19,7 @@ const handleBodyScroll = useThrottle(() => {
 }, 1000)
 const router = useRouter()
 emitter.on('historyRoute', (e: any) => {
+
   router.push(e)
 })
 </script>
