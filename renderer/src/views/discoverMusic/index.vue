@@ -9,30 +9,44 @@ const route = useRoute()
   <div class="discoverMusic">
     <div class="header">
       <template v-for="item in discoverMusicConfig">
-        <div
-          class="router"
-          @click="router.push(item.path)"
-          :class="route.path === item.path ? 'active' : ''"
-        >
+        <div class="router" @click="router.push(item.path)">
           {{
             item.name
           }}
+          <transition name="line">
+            <div class="line" v-if="route.path === item.path"></div>
+          </transition>
         </div>
       </template>
     </div>
     <div class="container">
       <router-view v-slot="{ Component }">
-        <template v-if="Component">
-          <keep-alive>
-            <component :is="Component" />
-          </keep-alive>
-        </template>
+        <keep-alive :max="6">
+          <transition name="fade-in">
+            <component :is="Component"></component>
+          </transition>
+        </keep-alive>
       </router-view>
     </div>
   </div>
 </template>
 
 <style scoped lang="less">
+.line-enter-from {
+  opacity: 0;
+  transform: scale(2);
+}
+.line-enter-active {
+  transition: all 0.5s ease;
+}
+.fade-in-enter-active {
+  transition: all 0.2s ease-in;
+}
+
+.fade-in-enter-from {
+  opacity: 0;
+  transform: translateX(-200px);
+}
 .discoverMusic {
   // overflow-y: scroll;
   height: 95%;
@@ -47,22 +61,25 @@ const route = useRoute()
     background-color: #2b2b2b;
     .router {
       margin-right: 20px;
+
       &:hover {
         color: #ffffff;
       }
-      &.active::after {
+      .line {
+        margin: 0 auto;
         display: block;
         margin-top: 4px;
         height: 4px;
         background-color: #ec4141;
         padding: 0 2px;
-        content: " ";
-        transform: scale(0.8);
         border-radius: 2px;
+        width: 60%;
+        text-align: center;
       }
     }
   }
 }
+
 .container {
   height: 100%;
   &::-webkit-scrollbar {

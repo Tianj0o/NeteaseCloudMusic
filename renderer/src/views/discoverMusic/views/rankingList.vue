@@ -35,48 +35,50 @@ const { handleMusiclistClick } = useToPage()
 </script>
 
 <template>
-  <div v-if="topList.length && OfficialList.length">
-    <div class="title">官方榜</div>
-    <template v-for="i in 4">
-      <div class="container">
-        <div
-          class="pic"
-          @click="handleMusiclistClick(topList[i - 1].id)"
-          style="width: 200px;position: relative;"
-        >
-          <t-card :pic-url="topList[i - 1].coverImgUrl"></t-card>
-          <play-icon class="icon"></play-icon>
-        </div>
-        <div class="lists">
-          <template v-for="(musicInfo, index) in OfficialList[i - 1]">
-            <div class="list" v-if="index < 5" :class="index % 2 === 0 ? '' : 'special'">
-              <div class="songName" style="color:#d2d2d2;">
-                <span :style="index > 2 ? '#666666' : 'color:#a63333'">{{ index }}</span>
-                <span style="margin: 10px;">-</span>
-                {{ musicInfo.name }}
-              </div>
-              <div class="songAuther" style="color: #6c6c6c;">{{ musicInfo.ar[0].name }}</div>
-            </div>
-          </template>
-        </div>
-      </div>
-    </template>
-  </div>
   <div>
-    <div class="title">全球榜</div>
-    <t-grid :columns="5" gap="20px">
-      <template v-for="item, index in topList">
-        <div
-          @click="handleMusiclistClick(item.id)"
-          class="pic"
-          v-if="index > 3"
-          style="position: relative;"
-        >
-          <t-card :pic-url="item.coverImgUrl"></t-card>
-          <play-icon class="icon"></play-icon>
+    <div v-if="topList.length && OfficialList.length">
+      <div class="title">官方榜</div>
+      <template v-for="i in 4">
+        <div class="container">
+          <div
+            class="pic"
+            @click="handleMusiclistClick(topList[i - 1].id)"
+            style="width: 200px;position: relative;"
+          >
+            <t-card :pic-url="topList[i - 1].coverImgUrl"></t-card>
+            <play-icon class="icon"></play-icon>
+          </div>
+          <div class="lists">
+            <template v-for="(musicInfo, index) in OfficialList[i - 1]">
+              <div class="list" v-if="index < 5" :class="index % 2 === 0 ? '' : 'special'">
+                <div class="songName" style="color:#d2d2d2;">
+                  <span :style="index > 2 ? '#666666' : 'color:#a63333'">{{ index }}</span>
+                  <span style="margin: 10px;">-</span>
+                  {{ musicInfo.name }}
+                </div>
+                <div class="songAuther" style="color: #6c6c6c;">{{ musicInfo.ar[0].name }}</div>
+              </div>
+            </template>
+          </div>
         </div>
       </template>
-    </t-grid>
+    </div>
+    <div>
+      <div class="title">全球榜</div>
+      <t-grid :columns="5" gap="20px">
+        <template v-for="item, index in topList">
+          <div
+            @click="handleMusiclistClick(item.id)"
+            class="pic"
+            v-if="index > 3"
+            style="position: relative;"
+          >
+            <t-card :pic-url="item.coverImgUrl"></t-card>
+            <play-icon class="icon"></play-icon>
+          </div>
+        </template>
+      </t-grid>
+    </div>
   </div>
 </template>
 

@@ -57,7 +57,7 @@ emitter.on('historyRoute', (e: any) => {
 
 <style scoped lang="less">
 .fade-in-enter-active {
-  transition: opacity 1s ease;
+  transition: opacity 0.3s ease;
 }
 
 .fade-in-enter-from {
