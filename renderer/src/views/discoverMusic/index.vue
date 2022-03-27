@@ -13,14 +13,20 @@ const route = useRoute()
           class="router"
           @click="router.push(item.path)"
           :class="route.path === item.path ? 'active' : ''"
-        >{{ item.name }}</div>
+        >
+          {{
+            item.name
+          }}
+        </div>
       </template>
     </div>
     <div class="container">
       <router-view v-slot="{ Component }">
-        <keep-alive>
-          <component :is="Component" />
-        </keep-alive>
+        <template v-if="Component">
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
+        </template>
       </router-view>
     </div>
   </div>

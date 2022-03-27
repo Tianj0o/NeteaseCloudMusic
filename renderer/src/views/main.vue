@@ -35,7 +35,14 @@ emitter.on('historyRoute', (e: any) => {
       </div>
       <div class="body" ref="scrollRef" @scroll="handleBodyScroll" id="container-body">
         <suspense>
-          <router-view></router-view>
+          <template #default>
+            <router-view v-slot="{ Component }">
+              <transition name="fade-in">
+                <component :is="Component" />
+              </transition>
+            </router-view>
+          </template>
+
           <template #fallback>
             <div>Loading...</div>
           </template>
@@ -49,6 +56,13 @@ emitter.on('historyRoute', (e: any) => {
 </template>
 
 <style scoped lang="less">
+.fade-in-enter-active {
+  transition: opacity 1s ease;
+}
+
+.fade-in-enter-from {
+  opacity: 0;
+}
 .main {
   display: flex;
   flex-direction: column;
