@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 const tCardRef = ref<HTMLElement>()
+const cardHeight = computed(() => tCardRef.value?.offsetHeight)
 
 defineProps<{
   picUrl?: string,
   targetId?: number,
   name?: string
 }>()
-
+defineExpose({
+  cardHeight
+})
 </script>
 
 <template>

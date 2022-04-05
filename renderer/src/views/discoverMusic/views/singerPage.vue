@@ -2,8 +2,9 @@
 import { getArtistlist } from '@/service/discoverMusic';
 import tCard from '@/components/baseUi/tCard.vue';
 import tGrid from '@/components/baseUi/tGrid.vue';
-import { ref, watchEffect } from 'vue';
+import { computed, onBeforeUpdate, onMounted, onUpdated, ref, watch, watchEffect } from 'vue';
 import { emitter } from '@/mitt';
+import { useViScroll } from '@/hooks/vScroll'
 interface item {
   title: string,
   value: number
@@ -47,7 +48,69 @@ emitter.on("scrollToBottom", () => {
   }
 });
 
+let instance = 0;
+onMounted(() => {
+  setInstance()
+  window.onresize = setInstance
+})
+function setInstance() {
+  instance = containerRef.value?.getBoundingClientRect().top! - 60;
+}
+const { scrollData } = useViScroll()
+function setStartIndex() {
+  console.log(instance, 'instance')
+  vScrollState.value.startIndex = Math.floor((scrollData.value.scrollTop - instance < 0 ? 0 : scrollData.value.scrollTop - instance) / vScrollState.value.singleItemHeight);
+  console.log(vScrollState.value.startIndex)
+}
+const vScrollState = ref({
+  singleItemHeight: 0,
+  containerHeight: computed(() => scrollData.value?.offsetHeight ?? 0).value,
+  startIndex: 0,
+})
+const showData = computed(() => {
+  let endIndex = vScrollState.value.startIndex + contentSize.value
+  if (endIndex > (singerData.value.length / tGradConfig.columns) - 1) {
+    endIndex = Math.ceil(singerData.value.length / tGradConfig.columns) - 1;
+  }
+  return singerData.value.slice(vScrollState.value.startIndex * tGradConfig.columns, endIndex * tGradConfig.columns)
+})
 
+const style = computed(() => {
+  return {
+    paddingTop: vScrollState.value.startIndex * vScrollState.value.singleItemHeight + 'px',
+    paddingBottom: (Math.ceil(singerData.value.length / tGradConfig.columns) - 1 - vScrollState.value.startIndex - contentSize.value) + 'px'
+  }
+})
+watch(scrollData, () => {
+  setStartIndex();
+})
+const tGradConfig = {
+  columns: 5,
+  gap: '14px'
+}
+const contentSize = computed(() => {
+  return Math.floor(scrollData.value.offsetHeight / vScrollState.value.singleItemHeight) + 2
+})
+
+const containerRef = ref<HTMLElement>()
+
+let itemRefs: InstanceType<typeof tCard>[] = []
+const setItemRef = (el: any) => {
+  if (itemRefs.length > 0) return
+  if (el) {
+    itemRefs.push(el)
+  }
+}
+onBeforeUpdate(() => {
+  itemRefs = []
+})
+
+onUpdated(() => {
+  if (itemRefs[0]) {
+    const singleHeight = (itemRefs[0].cardHeight as number + Number(tGradConfig.gap.slice(0, -2)))
+    vScrollState.value.singleItemHeight = singleHeight
+  }
+})
 </script>
 
 <template>
@@ -90,10 +153,15 @@ emitter.on("scrollToBottom", () => {
         </div>
       </div>
     </div>
-    <div class="container" v-if="singerData.length">
-      <t-grid :columns="5" gap="14px">
+    <div class="container" ref="containerRef" :style="style">
+      <t-grid v-bind="tGradConfig" v-if="showData.length">
+        <template v-for="item in showData">
+          <t-card :ref="setItemRef" :pic-url="item.picUrl" :name="item.name"></t-card>
+        </template>
+      </t-grid>
+      <t-grid v-bind="tGradConfig" v-else-if="singerData.length">
         <template v-for="item in singerData">
-          <t-card :pic-url="item.picUrl" :name="item.name"></t-card>
+          <t-card :ref="setItemRef" :pic-url="item.picUrl" :name="item.name"></t-card>
         </template>
       </t-grid>
     </div>

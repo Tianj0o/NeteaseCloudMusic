@@ -5,7 +5,7 @@ import { getPlaylistAll, getPlaylistDetails } from "@/service/discoverMusic";
 import { useRoute } from 'vue-router';
 import { formatNumber } from '@/hooks/formatNumber'
 import { music } from '@/store/type';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { disMusicStore } from '@/store/discoverMusic';
 
 const route = useRoute()
@@ -16,8 +16,7 @@ let musiListDetails = ref()
 watch(() => route.params, async () => {
   if (id) {
     if (id == '0') {
-
-      musicListdata.value = store.daiyluMusic
+      musicListdata.value = computed(() => store.daiyluMusic).value
       musiListDetails.value = ''
     } else {
       musicListdata.value = await getPlaylistAll(Number(id)).then(res => res.songs)
@@ -40,7 +39,7 @@ const handlePlayAll = () => {
 
 <template>
   <div class="music-list-details">
-    <div class="header">
+    <div class="header" v-if="musiListDetails">
       <div class="pic">
         <t-card :pic-url="musiListDetails.coverImgUrl"></t-card>
       </div>

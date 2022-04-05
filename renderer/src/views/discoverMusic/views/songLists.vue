@@ -33,7 +33,6 @@ watchEffect(async () => {
   totalNum.value = data.total
 })
 const { handleMusiclistClick } = useToPage()
-const songlistRef = ref<HTMLElement>()
 
 const handleCurrentChange = (index: number) => {
   pageSearchInfo.value.currentPage = index

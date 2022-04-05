@@ -2,24 +2,36 @@
 import footerVue from '@/components/baseUi/musicFooter.vue';
 import navHeader from '@/components/baseUi/navHeader.vue';
 import navMenu from '@/components/baseUi/navMenu.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { emitter } from '@/mitt';
 import { useThrottle } from '@/hooks/useThrottle';
 import { useRouter } from 'vue-router';
+import { useViScroll } from '@/hooks/vScroll'
 const scrollRef = ref<HTMLElement>()
 
 emitter.on('scrollToTop', () => {
   scrollRef.value!.scrollTo(0, 0)
 })
+
+const { setScroll } = useViScroll()
+
 const handleBodyScroll = useThrottle(() => {
+  setScroll(scrollRef.value!)
   const isArrive = scrollRef.value!.scrollHeight - scrollRef.value!.scrollTop > scrollRef.value!.clientHeight * 1.4 ? false : true
   if (isArrive) {
     emitter.emit('scrollToBottom')
   }
-}, 1000)
+}, 300)
+onMounted(() => {
+  setScroll(scrollRef.value as HTMLElement);
+  window.addEventListener('resize', () => {
+    setScroll(scrollRef.value as HTMLElement)
+  })
+})
+
+
 const router = useRouter()
 emitter.on('historyRoute', (e: any) => {
-
   router.push(e)
 })
 </script>
