@@ -51,26 +51,32 @@ export const disMusicStore = defineStore("disMusic", {
       if (!store.login) {
         // 数据属性名不一样 做一些处理
         const { playlists } = await getMusicListHotData();
-        const { id } = playlists.pop();
-        const { songs } = await getPlaylistAll(id);
-        this.daiyluMusic = songs;
         playlists.forEach((item: any) => {
           item.picUrl = item.coverImgUrl;
         });
         this.dailyPlaylist = playlists;
       } else {
         // 登录
-        // const { recommend } = await getDailyPlayList();
-        const data2 = await getDailyMusic();
         const { result } = await getNewMusiclist();
-
         this.dailyPlaylist = result ?? [];
-        if (data2?.data?.dailySongs) {
-          this.daiyluMusic = data2.data.dailySongs;
-        }
+
         const { setStorage } = useStorage();
         if (this.dailyPlaylist.length > 0) {
           setStorage("dailyPlayList", this.dailyPlaylist);
+        }
+      }
+    },
+    async getDailyMusic() {
+      const store = mainStore();
+      if (!store.login) {
+        const { id } = this.dailyPlaylist.pop()!;
+        const { songs } = await getPlaylistAll(id);
+        this.daiyluMusic = songs;
+      } else {
+        const data2 = await getDailyMusic();
+
+        if (data2?.data?.dailySongs) {
+          this.daiyluMusic = data2.data.dailySongs;
         }
       }
     },

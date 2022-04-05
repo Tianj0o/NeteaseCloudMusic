@@ -40,7 +40,7 @@ const handlePlayAll = () => {
 
 <template>
   <div class="music-list-details">
-    <div class="header" v-if="musiListDetails">
+    <div class="header">
       <div class="pic">
         <t-card :pic-url="musiListDetails.coverImgUrl"></t-card>
       </div>

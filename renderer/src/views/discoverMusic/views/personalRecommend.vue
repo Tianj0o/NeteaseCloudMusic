@@ -10,14 +10,12 @@ const store = disMusicStore()
 store.getBannerListData()
 const bannerlists = computed(() => store.bannerListsData)
 store.getDailyPlayListData()
-
+// 每日推荐歌单
 const dailyPlaylist = computed(() => {
   const data = store.dailyPlaylist
-  data.pop()
   return data
 })
 
-const firSongPicUrl = computed(() => (store.daiyluMusic[0] as any)?.al?.picUrl)
 
 const { handleMusiclistClick } = useToPage()
 
@@ -33,8 +31,8 @@ const { handleMusiclistClick } = useToPage()
           style="overflow: hidden;position: relative;height: 0;padding-bottom: 100%;"
         >
           <img
-            style="width: 100%;filter: blur(2px);position: absolute;height: 100%;"
-            :src="firSongPicUrl"
+            style="width: 100%;filter: blur(25px);position: absolute;height: 100%;"
+            :src="dailyPlaylist[dailyPlaylist.length - 1]?.picUrl"
           />
 
           <div
