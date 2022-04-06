@@ -21,7 +21,7 @@ const handleBodyScroll = useThrottle(() => {
   if (isArrive) {
     emitter.emit('scrollToBottom')
   }
-}, 300)
+}, 30)
 onMounted(() => {
   setScroll(scrollRef.value as HTMLElement);
   window.addEventListener('resize', () => {

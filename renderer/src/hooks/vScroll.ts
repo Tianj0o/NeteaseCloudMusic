@@ -12,13 +12,10 @@ export function useViScroll() {
       scrollTop: e.scrollTop,
     };
   }
-  function onScroll(callback: () => void) {
-    callback();
-  }
+
   return {
     scrollRef,
     setScroll,
     scrollData,
-    onScroll,
   };
 }
