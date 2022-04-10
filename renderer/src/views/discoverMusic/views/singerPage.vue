@@ -37,8 +37,6 @@ const tGradConfig = {
   gap: '14px'
 }
 
-
-
 let isComplete = false
 watchEffect(async () => {
   isComplete = true

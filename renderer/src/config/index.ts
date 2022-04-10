@@ -25,6 +25,10 @@ export const navMenuConfig: menuItem[] = [
     name: "直播",
     path: "/main/liveBroadcast",
   },
+  {
+    name: "设置",
+    path: "/main/setting",
+  },
 ];
 const navMenufiles = import.meta.glob("../views/*/index.vue");
 const setUpnavMenuRouters = () => {

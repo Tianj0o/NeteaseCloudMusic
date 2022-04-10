@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import tGrid from '@/components/baseUi/tGrid.vue';
 import { computed, ref } from 'vue';
+
 const props = defineProps<{
   allData: any[],
   tGradConfig: {
@@ -19,7 +20,6 @@ const vScrollState = ref({
   style: {}
 })
 const showData = computed(() => {
-
   let endIndex = vScrollState.value.startIndex + contentSize.value
   if (endIndex > (props.allData.length / props.tGradConfig.columns) - 1) {
     endIndex = Math.ceil(props.allData.length / props.tGradConfig.columns) - 1;
@@ -47,7 +47,7 @@ const contentSize = computed(() => {
     paddingBottom: ((Math.ceil(props.allData.length / props.tGradConfig.columns) - 1 - vScrollState.value.startIndex - contentSize.value)) * props.singleHeight + 'px'
   }
   if (vScrollState.value.startIndex + contentSize.value > props.allData.length / props.tGradConfig.columns - 1) {
-    console.log('emit')
+    // console.log('emit')
     emit('handleScrollTobottom')
   }
   return Math.floor(props.scrollData.offsetHeight / props.singleHeight) + 2
@@ -55,19 +55,18 @@ const contentSize = computed(() => {
 
 const emit = defineEmits(['handleScrollTobottom'])
 
-
 </script>
 
 <template>
   <div class="v-scroll" :style="vScrollState.style">
-    <t-grid v-bind="tGradConfig" v-if="showData.length || allData.length">
+    <t-grid v-bind="tGradConfig" v-if="singleHeight">
       <template v-if="showData.length">
-        <template v-for="(item, index) in showData" :key="item.name">
+        <template v-for="item in showData" :key="item.name">
           <slot :item="item"></slot>
         </template>
       </template>
       <template v-else>
-        <template v-for="(item, index) in allData" :key="item.name">
+        <template v-for="item in allData" :key="item.name">
           <slot :item="item"></slot>
         </template>
       </template>
