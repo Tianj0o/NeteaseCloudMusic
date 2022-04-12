@@ -136,15 +136,31 @@ export const mainStore = defineStore("main", {
     async isUserLogin() {
       const data = await isLogin();
       if (!data.data.account) {
-        const { clearStorage } = useStorage();
-        clearStorage();
+        const { clearStorage, deleteStorage } = useStorage();
+        //todo
+        deleteStorage("musicLists");
+        deleteStorage("currentIndex");
+        deleteStorage("currentMenu");
+        deleteStorage("dailyPlayList");
+        deleteStorage("id");
+        deleteStorage("avatarUrl");
+        deleteStorage("name");
+        deleteStorage("login");
         this.login = false;
         console.log("清除成功");
       }
     },
     userLoginOut() {
-      const { clearStorage } = useStorage();
-      clearStorage();
+      const { clearStorage, deleteStorage } = useStorage();
+      //todo
+      deleteStorage("musicLists");
+      deleteStorage("currentIndex");
+      deleteStorage("currentMenu");
+      deleteStorage("dailyPlayList");
+      deleteStorage("id");
+      deleteStorage("avatarUrl");
+      deleteStorage("name");
+      deleteStorage("login");
       this.login = false;
       setupStore();
       disMusicStore().getDailyPlayListData();

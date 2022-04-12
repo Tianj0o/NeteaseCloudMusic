@@ -1,18 +1,27 @@
 <script setup lang="ts">
-import { discoverMusicConfig } from '@/config';
-import { useRoute, useRouter } from 'vue-router';
-const router = useRouter()
-const route = useRoute()
+import { navMenuConfig } from "@/config/initSetting";
+import { useRoute, useRouter } from "vue-router";
+const router = useRouter();
+const route = useRoute();
+const discoverMusicConfig = navMenuConfig.value.find(
+  (item) => item.path === "/main/discoverMusic"
+)?.children;
+const firPath = discoverMusicConfig?.find((i) => i.isChecked === true);
+if (firPath) {
+  router.push(firPath.path);
+}
 </script>
 
 <template>
   <div class="discoverMusic">
     <div class="header">
       <template v-for="item in discoverMusicConfig">
-        <div class="router" @click="router.push(item.path)">
-          {{
-            item.name
-          }}
+        <div
+          class="router"
+          @click="router.push(item.path)"
+          v-if="item.isChecked"
+        >
+          {{ item.name }}
           <transition name="line">
             <div class="line" v-if="route.path === item.path"></div>
           </transition>
@@ -36,9 +45,11 @@ const route = useRoute()
   opacity: 0;
   transform: scale(2);
 }
+
 .line-enter-active {
   transition: all 0.5s ease;
 }
+
 .fade-in-enter-active {
   transition: all 0.2s ease-in;
 }
@@ -47,9 +58,11 @@ const route = useRoute()
   opacity: 0;
   transform: translateX(-200px);
 }
+
 .discoverMusic {
   // overflow-y: scroll;
   height: 95%;
+
   .header {
     font-size: 18px;
     color: #b6cad0;
@@ -59,12 +72,14 @@ const route = useRoute()
     width: 100%;
 
     background-color: #2b2b2b;
+
     .router {
       margin-right: 20px;
 
       &:hover {
         color: #ffffff;
       }
+
       .line {
         margin: 0 auto;
         display: block;
@@ -82,6 +97,7 @@ const route = useRoute()
 
 .container {
   height: 100%;
+
   &::-webkit-scrollbar {
     width: 0;
   }

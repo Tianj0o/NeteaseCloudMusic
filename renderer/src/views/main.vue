@@ -1,39 +1,42 @@
 <script setup lang="ts">
-import footerVue from '@/components/baseUi/musicFooter.vue';
-import navHeader from '@/components/baseUi/navHeader.vue';
-import navMenu from '@/components/baseUi/navMenu.vue';
-import { onMounted, ref } from 'vue';
-import { emitter } from '@/mitt';
-import { useThrottle } from '@/hooks/useThrottle';
-import { useRouter } from 'vue-router';
-import { useViScroll } from '@/hooks/vScroll'
-const scrollRef = ref<HTMLElement>()
+import footerVue from "@/components/baseUi/musicFooter.vue";
+import navHeader from "@/components/baseUi/navHeader.vue";
+import navMenu from "@/components/baseUi/navMenu.vue";
+import { onMounted, ref } from "vue";
+import { emitter } from "@/mitt";
+import { useThrottle } from "@/hooks/useThrottle";
+import { useRouter } from "vue-router";
+import { useViScroll } from "@/hooks/vScroll";
+const scrollRef = ref<HTMLElement>();
 
-emitter.on('scrollToTop', () => {
-  scrollRef.value!.scrollTo(0, 0)
-})
+emitter.on("scrollToTop", () => {
+  scrollRef.value!.scrollTo(0, 0);
+});
 
-const { setScroll } = useViScroll()
+const { setScroll } = useViScroll();
 
 const handleBodyScroll = useThrottle(() => {
-  setScroll(scrollRef.value!)
-  const isArrive = scrollRef.value!.scrollHeight - scrollRef.value!.scrollTop > scrollRef.value!.clientHeight * 1.4 ? false : true
+  setScroll(scrollRef.value!);
+  const isArrive =
+    scrollRef.value!.scrollHeight - scrollRef.value!.scrollTop >
+    scrollRef.value!.clientHeight * 1.4
+      ? false
+      : true;
   if (isArrive) {
-    emitter.emit('scrollToBottom')
+    emitter.emit("scrollToBottom");
   }
-}, 30)
+}, 30);
 onMounted(() => {
   setScroll(scrollRef.value as HTMLElement);
-  window.addEventListener('resize', () => {
-    setScroll(scrollRef.value as HTMLElement)
-  })
-})
+  window.addEventListener("resize", () => {
+    setScroll(scrollRef.value as HTMLElement);
+  });
+});
 
-
-const router = useRouter()
-emitter.on('historyRoute', (e: any) => {
-  router.push(e)
-})
+const router = useRouter();
+emitter.on("historyRoute", (e: any) => {
+  router.push(e);
+});
 </script>
 
 <template>
@@ -45,7 +48,12 @@ emitter.on('historyRoute', (e: any) => {
       <div class="menu">
         <nav-menu></nav-menu>
       </div>
-      <div class="body" ref="scrollRef" @scroll="handleBodyScroll" id="container-body">
+      <div
+        class="body"
+        ref="scrollRef"
+        @scroll="handleBodyScroll"
+        id="container-body"
+      >
         <suspense>
           <template #default>
             <router-view v-slot="{ Component }">

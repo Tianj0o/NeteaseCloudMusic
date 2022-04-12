@@ -11,8 +11,8 @@ export function useViScroll() {
     //   offsetHeight: e.offsetHeight,
     //   scrollTop: e.scrollTop,
     // };
-    scrollData.offsetHeight = e.offsetHeight;
-    scrollData.scrollTop = e.scrollTop;
+    scrollData.offsetHeight = e?.offsetHeight ?? 0;
+    scrollData.scrollTop = e?.scrollTop ?? 0;
   }
 
   return {

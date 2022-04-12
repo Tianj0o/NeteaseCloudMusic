@@ -1,32 +1,70 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
-import { navMenuConfig } from '@/config';
-import { iconBlank, iconChecked } from '@/components/iconsCpns/index';
-const defaultState = Array.from(navMenuConfig, () => {
-  return true
-})
-console.log(defaultState)
-const state = reactive(defaultState)
+import { iconReset, iconSave } from "@/components/iconsCpns";
+import {
+  navMenuConfig,
+  defaultMenuConfig,
+  setupNavMenuRouters,
+  setupDiscoverMusic,
+} from "@/config/initSetting";
+import setItem from "./cpns/setItem.vue";
+import { menuItem } from "@/config";
+import useStorage from "@/hooks/useStorage";
+import router from "@/router";
+
+const { setStorage } = useStorage();
+function handleSetItemClick(item: menuItem) {
+  if (item.children) {
+    item.children.forEach((i) => {
+      i.isChecked = false;
+      router.removeRoute(i.path.split("/")[2]);
+    });
+  }
+  if (item.isChecked === true) {
+    // 卸载路由
+    item.isChecked = !item.isChecked;
+
+    router.removeRoute(item.path.split("/")[2]);
+  } else {
+    // 添加路由
+    item.isChecked = !item.isChecked;
+    setupNavMenuRouters();
+    setupDiscoverMusic();
+  }
+  setStorage("navMenuConfig", navMenuConfig.value);
+}
+function handleReset() {
+  navMenuConfig.value = JSON.parse(JSON.stringify(defaultMenuConfig));
+  setStorage("navMenuConfig", defaultMenuConfig);
+  setupNavMenuRouters();
+  setupDiscoverMusic();
+}
+function handleSave() {
+  setStorage("navMenuConfig", navMenuConfig.value);
+}
 </script>
 
 <template>
   <div class="setting">
-    <div class="navMenuConfig">
-      <template v-for="(item, index) in navMenuConfig" :key="item.name">
-
-        <div v-if="item.path !== '/main/setting'" class="configItem" @click="state[index] = !state[index]">
-          <iconBlank v-if="state[index]" />
-          <iconChecked v-else />
-          {{ item.name }}
+    <div class="Config">
+      <template v-for="item in navMenuConfig" :key="item.name">
+        <div v-if="item.path !== '/main/setting'" class="configItem">
+          <setItem
+            @handleSetItemClick="handleSetItemClick"
+            :item="item"
+            :data="navMenuConfig"
+          />
         </div>
       </template>
+      <div class="control">
+        <button class="btn" @click="handleReset"><iconReset /> 重置</button>
+      </div>
     </div>
-</div>
+  </div>
 </template>
 
-<style lang="less" scoped >
+<style lang="less" scoped>
 .setting {
-  .navMenuConfig {
+  .Config {
     padding: 10px;
     border-radius: 4px;
     background-color: rgb(238, 250, 250);
@@ -35,6 +73,17 @@ const state = reactive(defaultState)
       color: black;
       display: flex;
       align-items: center;
+    }
+  }
+  .control {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    .btn {
+      display: flex;
+      margin-right: 10px;
+      align-items: center;
+      color: black;
     }
   }
 }

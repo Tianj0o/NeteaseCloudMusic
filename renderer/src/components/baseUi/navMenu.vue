@@ -1,25 +1,26 @@
 <script setup lang="ts">
-import { navMenuConfig } from '@/config';
-import useStorage from '@/hooks/useStorage';
-import { computed, ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { navMenuConfig } from "@/config/initSetting";
+import useStorage from "@/hooks/useStorage";
+import { ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
 
-const router = useRouter()
-const route = useRoute()
+const router = useRouter();
+const route = useRoute();
 
-// const currentRoute = computed(() => {
-//   return route.path.match(/\/main\/\w+/)?.[0]
-// })
-const { getStorage, setStorage } = useStorage()
+const { getStorage, setStorage } = useStorage();
 
-let currentRoute = ref(getStorage('currentMenu') ?? navMenuConfig[0].path)
+let currentRoute = ref(
+  getStorage("currentMenu") ?? navMenuConfig.value[0].path
+);
 const handleMenuClick = (path: string) => {
-  currentRoute.value = path
-  setStorage('currentMenu', path)
-  router.push(path)
+  currentRoute.value = path;
+  setStorage("currentMenu", path);
+  router.push(path);
+};
+const firPath = navMenuConfig.value.find((i) => i.isChecked === true);
+if (firPath) {
+  router.push(firPath.path);
 }
-
-
 </script>
 
 <template>
@@ -27,10 +28,13 @@ const handleMenuClick = (path: string) => {
     <div class="system">
       <template v-for="item in navMenuConfig" :key="item.path">
         <div
+          v-if="item.isChecked"
           @click="handleMenuClick(item.path)"
           class="sysytem-item"
-          :class="{ 'active': currentRoute === item.path }"
-        >{{ item.name }}</div>
+          :class="{ active: currentRoute === item.path }"
+        >
+          {{ item.name }}
+        </div>
       </template>
     </div>
   </div>

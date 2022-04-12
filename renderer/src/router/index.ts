@@ -9,7 +9,7 @@ const routes: RouteRecordRaw[] = [
     name: "main",
     path: "/main",
     component: () => import("@/views/main.vue"),
-    redirect: "/main/discoverMusic/personalRecommend",
+    // redirect: "/main/discoverMusic/personalRecommend",
     children: [
       {
         path: "/main/musicList/:id",
