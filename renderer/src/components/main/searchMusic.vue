@@ -1,30 +1,34 @@
 <script setup lang="ts">
-import router from '@/router';
-import { ref } from '@vue/reactivity';
-import { watch } from '@vue/runtime-core';
+import router from "@/router";
+import { ref } from "@vue/reactivity";
+import { watch } from "@vue/runtime-core";
 interface searchResult {
-  name: string,
-  id: number
+  name: string;
+  id: number;
 }
-const searchContent = ref('')
-let isActive = true
+const searchContent = ref("");
+let isActive = true;
 watch(searchContent, () => {
-  isActive = true
-})
+  isActive = true;
+});
 
 // enter query musci
 const handleQueryClick = async () => {
-  if (isActive && searchContent.value !== '') {
-    isActive = false
-    router.push(`/main/songResultPage/${searchContent.value}`)
+  if (isActive && searchContent.value !== "") {
+    isActive = false;
+    router.push(`/main/songResultPage/${searchContent.value}`);
   }
-}
+};
 </script>
 
 <template>
   <div class="search">
-    <i class="icon iconfont icon-sousuo"></i>
-    <input @keydown.enter="handleQueryClick" v-model="searchContent" type="text" />
+    <i class="icon iconfont icon-sousuo" @click="handleQueryClick"></i>
+    <input
+      @keydown.enter="handleQueryClick"
+      v-model="searchContent"
+      type="text"
+    />
   </div>
 </template>
 

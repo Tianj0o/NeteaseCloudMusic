@@ -1,25 +1,28 @@
 <script setup lang="ts">
-import { iconBlank, iconChecked } from "@/components/iconsCpns/index";
+import { iconBlank, iconChecked, iconJump } from "@/components/iconsCpns/index";
 import { menuItem } from "@/config";
 import { useRouter } from "vue-router";
 defineProps<{
   item: menuItem;
   data?: menuItem[];
 }>();
-const router = useRouter();
 function handleItemClick(item: menuItem) {
   emit("handleSetItemClick", item);
 }
-
 const emit = defineEmits(["handleSetItemClick"]);
 </script>
 
 <template>
   <div class="setItem">
-    <div @click="handleItemClick(item)">
-      <iconChecked v-if="item.isChecked" />
-      <iconBlank v-else />
-      <span class="name">{{ item.name }}</span>
+    <div class="container">
+      <div @click="handleItemClick(item)">
+        <iconChecked v-if="item.isChecked" />
+        <iconBlank v-else />
+        <span class="name">{{ item.name }}</span>
+      </div>
+      <!-- <div class="jump" @click="handleClick(item.path)">
+        <iconJump />
+      </div> -->
     </div>
     <div class="children">
       <template v-if="item.children">
@@ -38,6 +41,10 @@ const emit = defineEmits(["handleSetItemClick"]);
 <style scoped lang="less">
 .setItem {
   width: 100%;
+  .container {
+    display: flex;
+    align-items: center;
+  }
 }
 .name {
   color: black;

@@ -1,23 +1,27 @@
 <script setup lang="ts">
-import { getHighqualityPlaylist } from '@/service/discoverMusic';
-import tGrid from '@/components/baseUi/tGrid.vue';
-import tCard from '@/components/baseUi/tCard.vue';
-import { useToPage } from '@/hooks/useToPage';
-import { ref, watchEffect } from '@vue/runtime-dom';
-import { emitter } from '@/mitt';
-const { handleMusiclistClick } = useToPage()
-const playlists = ref<{ name: string, id: number, coverImgUrl: string, updateTime: number }[]>([])
-let lastUpdateTime = ref<string>('')
+import { getHighqualityPlaylist } from "@/service/discoverMusic";
+import tGrid from "@/components/baseUi/tGrid.vue";
+import tCard from "@/components/baseUi/tCard.vue";
+import { useToPage } from "@/hooks/useToPage";
+import { ref, watchEffect } from "@vue/runtime-dom";
+import { emitter } from "@/mitt";
+const { handleMusiclistClick } = useToPage();
+const playlists = ref<
+  { name: string; id: number; coverImgUrl: string; updateTime: number }[]
+>([]);
+let lastUpdateTime = ref<string>("");
 watchEffect(async () => {
-  console.log('hhhh')
-  const data = await getHighqualityPlaylist({ before: lastUpdateTime.value }).then(res => res.playlists)
-  playlists.value = [...playlists.value, ...data]
-})
+  console.log("hhhh");
+  const data = await getHighqualityPlaylist({
+    before: lastUpdateTime.value,
+  }).then((res) => res.playlists);
+  playlists.value = [...playlists.value, ...data];
+});
 
-emitter.on('scrollToBottom', () => {
-  lastUpdateTime.value = playlists.value[playlists.value.length - 1]?.updateTime + ''
-  console.log(lastUpdateTime.value);
-})
+emitter.on("scrollToBottom", () => {
+  lastUpdateTime.value =
+    playlists.value[playlists.value.length - 1]?.updateTime + "";
+});
 </script>
 
 <template>
@@ -36,5 +40,4 @@ emitter.on('scrollToBottom', () => {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

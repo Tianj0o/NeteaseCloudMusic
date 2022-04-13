@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { iconReset, iconSave } from "@/components/iconsCpns";
+import { iconReset } from "@/components/iconsCpns";
 import {
   navMenuConfig,
   defaultMenuConfig,
@@ -9,21 +9,24 @@ import {
 import setItem from "./cpns/setItem.vue";
 import { menuItem } from "@/config";
 import useStorage from "@/hooks/useStorage";
-import router from "@/router";
+import { useRouter } from "vue-router";
 
 const { setStorage } = useStorage();
+const router = useRouter();
 function handleSetItemClick(item: menuItem) {
   if (item.children) {
     item.children.forEach((i) => {
       i.isChecked = false;
-      router.removeRoute(i.path.split("/")[2]);
+      const routeName = i.path.split("/")[2];
+      if (router.hasRoute(routeName)) router.removeRoute(routeName);
     });
   }
   if (item.isChecked === true) {
     // 卸载路由
     item.isChecked = !item.isChecked;
 
-    router.removeRoute(item.path.split("/")[2]);
+    const routeName = item.path.split("/")[3];
+    if (router.hasRoute(routeName)) router.removeRoute(routeName);
   } else {
     // 添加路由
     item.isChecked = !item.isChecked;
@@ -37,9 +40,6 @@ function handleReset() {
   setStorage("navMenuConfig", defaultMenuConfig);
   setupNavMenuRouters();
   setupDiscoverMusic();
-}
-function handleSave() {
-  setStorage("navMenuConfig", navMenuConfig.value);
 }
 </script>
 
@@ -64,11 +64,13 @@ function handleSave() {
 
 <style lang="less" scoped>
 .setting {
+  background-color: rgb(238, 250, 250);
+  display: flex;
+  justify-content: space-between;
   .Config {
     padding: 10px;
     border-radius: 4px;
-    background-color: rgb(238, 250, 250);
-
+    flex: 1;
     .configItem {
       color: black;
       display: flex;
@@ -85,6 +87,10 @@ function handleSave() {
       align-items: center;
       color: black;
     }
+  }
+  .img {
+    flex: 1;
+    background-color: red;
   }
 }
 </style>
