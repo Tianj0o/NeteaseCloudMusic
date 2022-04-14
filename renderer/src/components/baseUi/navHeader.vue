@@ -1,53 +1,56 @@
 <script setup lang="ts">
-import searchMusic from '../main/searchMusic.vue';
-import loginModal from '../login/loginModal.vue';
-import { ref } from '@vue/reactivity';
-import { mainStore } from '@/store';
-import { useRouterToHistory } from '@/hooks/useHistoryRoute';
-import { useRoute } from 'vue-router';
-const loginModalRef = ref<InstanceType<typeof loginModal>>()
+import searchMusic from "../main/searchMusic.vue";
+import loginModal from "../login/loginModal.vue";
+import { ref } from "@vue/reactivity";
+import { mainStore } from "@/store";
+import { useRouterToHistory } from "@/hooks/useHistoryRoute";
+import { useRoute } from "vue-router";
+const loginModalRef = ref<InstanceType<typeof loginModal>>();
 // const { ipcRenderer } = (window as any).require('electron');
 const handleLoginClick = () => {
   if (loginModalRef.value)
-    loginModalRef.value.isShowLogin = !loginModalRef.value.isShowLogin
-}
+    loginModalRef.value.isShowLogin = !loginModalRef.value.isShowLogin;
+};
 const handleLoginOutClick = () => {
-  mainStore().userLoginOut()
-}
+  mainStore().userLoginOut();
+};
 const handleMinWindow = () => {
   // ipcRenderer.send('winAction', 'min')
-}
+};
 const handleMaxWindow = () => {
   // ipcRenderer.send('winAction', 'max')
-}
+};
 const handleCloseWindow = () => {
   // ipcRenderer.send('winAction', 'close')
-}
-const store = mainStore()
-const { goBack, goFor, getLength } = useRouterToHistory()
-const route = useRoute()
-function handleForward(type: 'for' | 'back') {
-  if (getLength(type).value.length === 0) return
-  type === 'for' ? goFor({ ...route }) : goBack({ ...route })
+};
+const store = mainStore();
+const { goBack, goFor, getLength } = useRouterToHistory();
+const route = useRoute();
+function handleForward(type: "for" | "back") {
+  if (getLength(type) === 0) return;
+  type === "for" ? goFor({ ...route }) : goBack({ ...route });
 }
 </script>
 
 <template>
   <div class="header">
     <div class="title">
-      <i style="font-size: 2rem;margin: 0;" class="icon iconfont icon-wangyiyunyinle"></i>
+      <i
+        style="font-size: 2rem; margin: 0"
+        class="icon iconfont icon-wangyiyunyinle"
+      ></i>
       <span class="wangyiyun">网易云音乐</span>
     </div>
     <div class="center flex">
       <div class="for-back flex">
         <i
           class="icon iconfont icon-arrow-left-bold"
-          :class="{ 'empty': getLength('back').value.length === 0 }"
+          :class="{ empty: getLength('back') === 0 }"
           @click="handleForward('back')"
         ></i>
         <i
           class="icon iconfont icon-arrow-right-bold"
-          :class="{ 'empty': getLength('for').value.length === 0 }"
+          :class="{ empty: getLength('for') === 0 }"
           @click="handleForward('for')"
         ></i>
       </div>
@@ -62,9 +65,11 @@ function handleForward(type: 'for' | 'back') {
         <div v-if="store.login === false" @click="handleLoginClick">登录</div>
         <div
           v-else
-          style="margin-left: 5px;font-weight: bold;color: #b82525;"
+          style="margin-left: 5px; font-weight: bold; color: #b82525"
           @click="handleLoginOutClick"
-        >退出登录</div>
+        >
+          退出登录
+        </div>
         <login-modal ref="loginModalRef"></login-modal>
       </div>
       <div class="setting flex">

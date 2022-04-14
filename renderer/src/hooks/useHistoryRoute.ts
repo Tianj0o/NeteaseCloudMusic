@@ -1,12 +1,16 @@
-import { RouteLocationNormalized, useRouter } from "vue-router";
-import { ref } from "vue";
+import { RouteLocationNormalized } from "vue-router";
+import { ref, watch } from "vue";
 import { emitter } from "@/mitt";
+import router from "@/router";
 
 const MAX_CACHE = 10;
 const forwradList = ref<RouteLocationNormalized[]>([]),
   backwardList = ref<RouteLocationNormalized[]>([]);
-
 export function useRouterToHistory() {
+  function check(name: string) {
+    return router.hasRoute(name);
+  }
+
   return {
     addForward(route: RouteLocationNormalized) {
       route.meta.isHistory = true;
@@ -22,7 +26,12 @@ export function useRouterToHistory() {
     // 后退
     goBack(currentRoute: RouteLocationNormalized) {
       forwradList.value.push(currentRoute);
-      const current = backwardList.value.pop();
+      let current = backwardList.value.pop();
+
+      while (!check(current?.name as string) && backwardList.value.length) {
+        current = backwardList.value.pop();
+      }
+
       if (current) {
         emitter.emit("historyRoute", current);
       }
@@ -30,13 +39,22 @@ export function useRouterToHistory() {
     // 前进
     goFor(currentRoute: RouteLocationNormalized) {
       backwardList.value.push(currentRoute);
-      const current = forwradList.value.pop();
+
+      let current = forwradList.value.pop();
+      while (!check(current?.name as string) && forwradList.value.length) {
+        current = forwradList.value.pop();
+      }
       if (current) {
         emitter.emit("historyRoute", current);
       }
     },
     getLength(type: "back" | "for") {
-      return type === "back" ? backwardList : forwradList;
+      return type === "back"
+        ? backwardList.value.length
+        : forwradList.value.length;
+    },
+    getAllLength() {
+      return backwardList.value.length + forwradList.value.length;
     },
   };
 }

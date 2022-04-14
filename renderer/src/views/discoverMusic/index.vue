@@ -6,10 +6,18 @@ const route = useRoute();
 const discoverMusicConfig = navMenuConfig.value.find(
   (item) => item.path === "/main/discoverMusic"
 )?.children;
-const firPath = discoverMusicConfig?.find((i) => i.isChecked === true);
+let firPath = discoverMusicConfig?.find((i) => i.isChecked === true);
 if (firPath) {
   router.push(firPath.path);
 }
+router.beforeEach((to, from) => {
+  firPath = discoverMusicConfig?.find((i) => i.isChecked === true);
+  if (to.path === "/main/discoverMusic") {
+    if (firPath) {
+      return firPath.path;
+    }
+  }
+});
 </script>
 
 <template>

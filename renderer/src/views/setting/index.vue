@@ -25,11 +25,12 @@ function handleSetItemClick(item: menuItem) {
     // 卸载路由
     item.isChecked = !item.isChecked;
 
-    const routeName = item.path.split("/")[3];
+    const routeName = item.path.split("/")[2];
     if (router.hasRoute(routeName)) router.removeRoute(routeName);
   } else {
     // 添加路由
     item.isChecked = !item.isChecked;
+    setStorage("navMenuConfig", defaultMenuConfig);
     setupNavMenuRouters();
     setupDiscoverMusic();
   }
