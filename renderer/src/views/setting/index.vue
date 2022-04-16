@@ -18,14 +18,16 @@ function handleSetItemClick(item: menuItem) {
     item.children.forEach((i) => {
       i.isChecked = false;
       const routeName = i.path.split("/")[2];
+      console.log(routeName, "routeName");
       if (router.hasRoute(routeName)) router.removeRoute(routeName);
     });
   }
   if (item.isChecked === true) {
     // 卸载路由
     item.isChecked = !item.isChecked;
-
-    const routeName = item.path.split("/")[2];
+    const nameArr = item.path.split("/");
+    const routeName = nameArr[nameArr.length - 1];
+    console.log(routeName, "routeName");
     if (router.hasRoute(routeName)) router.removeRoute(routeName);
   } else {
     // 添加路由
