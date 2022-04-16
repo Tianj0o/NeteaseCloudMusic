@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { navMenuConfig } from "@/config/initSetting";
 import useStorage from "@/hooks/useStorage";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 const router = useRouter();
@@ -10,16 +10,28 @@ const route = useRoute();
 const { getStorage, setStorage } = useStorage();
 
 let currentRoute = ref(
-  getStorage("currentMenu") ?? navMenuConfig.value[0].path
+  getStorage("currentMenu") ??
+    getPathName(
+      navMenuConfig.value.find((item) => item.isChecked === true)?.path ?? ""
+    )
 );
 const handleMenuClick = (path: string) => {
-  currentRoute.value = path;
-  setStorage("currentMenu", path);
   router.push(path);
 };
 const firPath = navMenuConfig.value.find((i) => i.isChecked === true);
 if (firPath) {
   router.push(firPath.path);
+}
+watch(
+  () => route.path,
+  (path) => {
+    const routeName = getPathName(path);
+    currentRoute.value = routeName;
+    setStorage("currentMenu", path);
+  }
+);
+function getPathName(path: string) {
+  return path.split("/")[2] ?? "";
 }
 </script>
 
@@ -31,7 +43,7 @@ if (firPath) {
           v-if="item.isChecked"
           @click="handleMenuClick(item.path)"
           class="sysytem-item"
-          :class="{ active: currentRoute === item.path }"
+          :class="{ active: currentRoute === getPathName(item.path) }"
         >
           {{ item.name }}
         </div>
