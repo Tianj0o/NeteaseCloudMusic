@@ -1,65 +1,79 @@
 <script setup lang="ts">
-import tGrid from '@/components/baseUi/tGrid.vue';
-import { computed, ref } from 'vue';
+import tGrid from "@/components/baseUi/tGrid.vue";
+import { computed, ref } from "vue";
 
 const props = defineProps<{
-  allData: any[],
+  allData: any[];
   tGradConfig: {
-    columns: number,
-  },
+    columns: number;
+  };
   scrollData: {
-    offsetHeight: number,
-    scrollTop: number
-  },
-  singleHeight: number,
-  fixScrollTop?: number
-}>()
+    offsetHeight: number;
+    scrollTop: number;
+  };
+  singleHeight: number;
+  fixScrollTop?: number;
+}>();
 const vScrollState = ref({
   startIndex: 0,
   vStartIndex: 0,
-  style: {}
-})
+  style: {},
+});
 const showData = computed(() => {
-  let endIndex = vScrollState.value.startIndex + contentSize.value
-  if (endIndex > (props.allData.length / props.tGradConfig.columns) - 1) {
+  let endIndex = vScrollState.value.startIndex + contentSize.value;
+  if (endIndex > props.allData.length / props.tGradConfig.columns - 1) {
     endIndex = Math.ceil(props.allData.length / props.tGradConfig.columns) - 1;
   }
   // 返回的是虚拟的index 多一个屏幕 优化体验
 
-  return props.allData.slice(vScrollState.value.vStartIndex * props.tGradConfig.columns, endIndex * props.tGradConfig.columns)
-})
+  return props.allData.slice(
+    vScrollState.value.vStartIndex * props.tGradConfig.columns,
+    endIndex * props.tGradConfig.columns
+  );
+});
 const contentSize = computed(() => {
-  let index
+  let index;
   if (props.fixScrollTop) {
-    const afterFixScrollTop = (props.scrollData.scrollTop - props.fixScrollTop)
-    index = Math.floor((afterFixScrollTop < 0 ? 0 : afterFixScrollTop / props.singleHeight))
+    const afterFixScrollTop = props.scrollData.scrollTop - props.fixScrollTop;
+    index = Math.floor(
+      afterFixScrollTop < 0 ? 0 : afterFixScrollTop / props.singleHeight
+    );
   } else {
-    index = Math.floor(((props.scrollData.scrollTop) / props.singleHeight))
+    index = Math.floor(props.scrollData.scrollTop / props.singleHeight);
   }
   vScrollState.value.startIndex = index < 0 ? 0 : index;
   if (vScrollState.value.startIndex < contentSize.value) {
     vScrollState.value.vStartIndex = 0;
   } else {
-    vScrollState.value.vStartIndex = vScrollState.value.startIndex - contentSize.value
+    vScrollState.value.vStartIndex =
+      vScrollState.value.startIndex - contentSize.value;
   }
   vScrollState.value.style = {
-    paddingTop: vScrollState.value.vStartIndex * props.singleHeight + 'px',
-    paddingBottom: ((Math.ceil(props.allData.length / props.tGradConfig.columns) - 1 - vScrollState.value.startIndex - contentSize.value)) * props.singleHeight + 'px'
-  }
-  if (vScrollState.value.startIndex + contentSize.value > props.allData.length / props.tGradConfig.columns - 1) {
+    paddingTop: vScrollState.value.vStartIndex * props.singleHeight + "px",
+    paddingBottom:
+      (Math.ceil(props.allData.length / props.tGradConfig.columns) -
+        1 -
+        vScrollState.value.startIndex -
+        contentSize.value) *
+        props.singleHeight +
+      "px",
+  };
+  if (
+    vScrollState.value.startIndex + contentSize.value >
+    props.allData.length / props.tGradConfig.columns - 1
+  ) {
     // console.log('emit')
-    emit('handleScrollTobottom')
+    emit("handleScrollTobottom");
   }
-  return Math.floor(props.scrollData.offsetHeight / props.singleHeight) + 2
-})
+  return Math.floor(props.scrollData.offsetHeight / props.singleHeight) + 2;
+});
 
-const emit = defineEmits(['handleScrollTobottom'])
-
+const emit = defineEmits(["handleScrollTobottom"]);
 </script>
 
 <template>
   <div class="v-scroll" :style="vScrollState.style">
-    <t-grid v-bind="tGradConfig" v-if="singleHeight">
+    <t-grid v-bind="tGradConfig">
       <template v-if="showData.length">
         <template v-for="item in showData" :key="item.name">
           <slot :item="item"></slot>
@@ -74,5 +88,4 @@ const emit = defineEmits(['handleScrollTobottom'])
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
