@@ -1,47 +1,45 @@
 <script setup lang="ts">
-import type { music } from '@/store/type'
-import { formateTimeToString } from '@/hooks/formatTime'
-import { mainStore } from '@/store'
-import { useClickTwice } from '@/hooks/useClick'
-import { computed } from 'vue'
-import { likeMusic } from '@/service/discoverMusic'
+import type { music } from "@/store/type";
+import { formateTimeToString } from "@/hooks/formatTime";
+import { mainStore } from "@/store";
+import { useClickTwice } from "@/hooks/useClick";
+import { computed } from "vue";
+import { likeMusic } from "@/service/discoverMusic";
 const props = defineProps<{
-  musiclists: music[]
-}>()
-const store = mainStore()
+  musiclists: music[];
+}>();
+const store = mainStore();
 
-
-const userLikeLists = computed(() => store.userLikelists)
+const userLikeLists = computed(() => store.userLikelists);
 const isLike = (id: number) => {
-  return userLikeLists.value.includes(id)
-}
+  return userLikeLists.value.includes(id);
+};
 
 const handleLikeClick = async (id: number) => {
   if (isLike(id)) {
-    await likeMusic(id + '&like=false')
+    await likeMusic(id + "&like=false");
   } else {
-    await likeMusic(id + '')
+    await likeMusic(id + "");
   }
-  await store.getUserLikelistData()
-}
+  await store.getUserLikelistData();
+};
 
 const musicItemClick = useClickTwice((index: number) => {
-  console.log(index)
-  changPlayList(index)
-})
+  changPlayList(index);
+});
 function changPlayList(index: number, data?: music[]) {
-  store.musicLists = data ?? props.musiclists
-  store.changToindex(index)
+  store.musicLists = data ?? props.musiclists;
+  store.changToindex(index);
 }
 defineExpose({
-  changPlayList
-})
+  changPlayList,
+});
 </script>
 
 <template>
   <div class="music-list">
     <div class="title">
-      <div class="handler" style="padding-left:20px">操作</div>
+      <div class="handler" style="padding-left: 20px">操作</div>
       <div class="name">标题</div>
       <div class="singer">歌手</div>
       <div class="album">专辑</div>
@@ -52,22 +50,28 @@ defineExpose({
         <div
           class="music-item"
           @click="musicItemClick(index)"
-          :class="{ 'special': index % 2 === 0 }"
+          :class="{ special: index % 2 === 0 }"
         >
-          <div style="width: 10px;margin-right: 10px;">{{ (index + '').padStart(2, '0') }}</div>
+          <div style="width: 10px; margin-right: 10px">
+            {{ (index + "").padStart(2, "0") }}
+          </div>
           <div class="handler">
             <i
               class="icon iconfont"
-              style="margin-right: 5px;"
+              style="margin-right: 5px"
               :class="isLike(music.id) ? 'icon-xihuan1' : 'icon-xihuan'"
               @click="handleLikeClick(music.id)"
             ></i>
             <i class="icon iconfont icon-xiazai"></i>
           </div>
-          <div class="name" style="color: #d1d1d1;font-size: 13px;">{{ music.name }}</div>
+          <div class="name" style="color: #d1d1d1; font-size: 13px">
+            {{ music.name }}
+          </div>
           <div class="singer">{{ music.ar[0].name }}</div>
           <div class="album">{{ music.al.name }}</div>
-          <div class="duration">{{ formateTimeToString(Number(music.dt.toString().slice(0, 3))) }}</div>
+          <div class="duration">
+            {{ formateTimeToString(Number(music.dt.toString().slice(0, 3))) }}
+          </div>
         </div>
       </template>
     </div>

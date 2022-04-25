@@ -1,65 +1,63 @@
 <script setup lang="ts">
-import musicPlayer from '../musicPlayer/musicPlayer.vue'
-import { mainStore } from '@/store';
-import { computed, ref } from '@vue/reactivity';
-import useStorage from '@/hooks/useStorage';
-import { nextTick } from '@vue/runtime-core';
-import musicList from '../main/musicList.vue';
-import { watchEffect } from 'vue';
-import { getMusicUrl } from '@/service';
-import { useClickTwice } from '@/hooks/useClick';
-const store = mainStore()
+import musicPlayer from "../musicPlayer/musicPlayer.vue";
+import { mainStore } from "@/store";
+import { computed, ref } from "@vue/reactivity";
+import useStorage from "@/hooks/useStorage";
+import { nextTick } from "@vue/runtime-core";
+import musicList from "../main/musicList.vue";
+import { watchEffect } from "vue";
+import { getMusicUrl } from "@/service";
+import { useClickTwice } from "@/hooks/useClick";
+const store = mainStore();
 let currentMusic = computed(() => {
-  return store.currentMusic
-})
-const { setStorage } = useStorage()
+  return store.currentMusic;
+});
+const { setStorage } = useStorage();
 
 const musicLists = computed(() => {
-  const musicLists = store.musicLists
+  const musicLists = store.musicLists;
   if (musicLists.length > 0) {
-    setStorage('musicLists', musicLists)
+    setStorage("musicLists", musicLists);
   }
-  return musicLists
-})
-const isShow = ref(false)
+  return musicLists;
+});
+const isShow = ref(false);
 const handleMusicListClick = () => {
-  isShow.value = !isShow.value
-}
-const musicPlayerRef = ref<InstanceType<typeof musicPlayer>>()
+  isShow.value = !isShow.value;
+};
+const musicPlayerRef = ref<InstanceType<typeof musicPlayer>>();
 
-// 双击列表 
+// 双击列表
 const musicListItemClick = useClickTwice((index: number) => {
-  console.log(index)
+  // console.log(index)
   store.changToindex(index);
   nextTick(() => {
     if (musicPlayerRef.value) {
       musicPlayerRef.value.audioRef?.play();
-      musicPlayerRef.value.musicState.isPlay = true
+      musicPlayerRef.value.musicState.isPlay = true;
     }
-  })
-})
-let isFirst = true
+  });
+});
+let isFirst = true;
 watchEffect(() => {
   const music = store.currentMusic;
 
   if (music && Object.keys(music).length !== 0) {
-    getMusicUrl(music.id + '').then(res => {
-      console.log('update')
-      music.url = res.data[0].url
+    getMusicUrl(music.id + "").then((res) => {
+      // console.log('update')
+      music.url = res.data[0].url;
       if (!isFirst) {
         nextTick(() => {
           (musicPlayerRef.value as any).audioRef?.play();
-          (musicPlayerRef.value as any).musicState.isPlay = true
-        })
+          (musicPlayerRef.value as any).musicState.isPlay = true;
+        });
       } else {
-        isFirst = false
+        isFirst = false;
       }
-    })
+    });
   }
-  setStorage('currentIndex', store.currentIndex)
-})
-
-
+  setStorage("currentIndex", store.currentIndex);
+});
 </script>
 <template>
   <div class="footer">
@@ -73,7 +71,10 @@ watchEffect(() => {
       </div>
     </div>
     <div class="music-player">
-      <musicPlayer ref="musicPlayerRef" :currentMusic="currentMusic"></musicPlayer>
+      <musicPlayer
+        ref="musicPlayerRef"
+        :currentMusic="currentMusic"
+      ></musicPlayer>
     </div>
     <div class="music-lists">
       <div class="music-list" @click="handleMusicListClick">

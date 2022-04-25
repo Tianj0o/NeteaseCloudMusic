@@ -120,7 +120,7 @@ export const setupDiscoverMusic = () => {
       }
     }
   }
-  console.log(router.getRoutes());
+  // console.log(router.getRoutes());
 };
 function shouldAdd(config: menuItem[], path: string) {
   return config.find((item) => item.path === path)?.isChecked;

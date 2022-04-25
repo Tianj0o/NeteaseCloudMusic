@@ -70,13 +70,11 @@ export const disMusicStore = defineStore("disMusic", {
       const store = mainStore();
       if (!store.login) {
         const { id } = this.dailyPlaylist.shift()!;
-        console.log(id, "id");
         getPlaylistAll(id).then((res) => {
           const { songs } = res;
           this.daiyluMusic = songs;
         });
       } else {
-        console.log(222222);
         const data2 = await getDailyMusic();
 
         if (data2?.data?.dailySongs) {

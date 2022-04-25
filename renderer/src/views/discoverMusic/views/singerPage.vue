@@ -93,9 +93,7 @@ watchEffect(async () => {
 });
 
 function handleGetData() {
-  console.log("hhh");
   if (!isComplete) {
-    console.log("++++++++");
     currentQueryConfig.value.offset += currentQueryConfig.value.limit;
   }
 }

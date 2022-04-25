@@ -11,7 +11,6 @@ const playlists = ref<
 >([]);
 let lastUpdateTime = ref<string>("");
 watchEffect(async () => {
-  console.log("hhhh");
   const data = await getHighqualityPlaylist({
     before: lastUpdateTime.value,
   }).then((res) => res.playlists);

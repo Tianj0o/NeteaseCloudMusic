@@ -4,7 +4,7 @@ export const useClickTwice = (fn: (args: any) => void, time = 1000) => {
     tick++;
     setTimeout(() => {
       if (tick >= 2) {
-        console.log(args);
+        // console.log(args);
         fn.apply(this, args);
       }
       tick = 0;

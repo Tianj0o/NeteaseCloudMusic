@@ -1,37 +1,39 @@
 <script setup lang="ts">
-import { getToplist } from '@/service/discoverMusic';
-import { ref } from 'vue';
-import tCard from '@/components/baseUi/tCard.vue';
-import tGrid from '@/components/baseUi/tGrid.vue';
-import { getPlaylistAll } from '@/service/discoverMusic';
-import type { music } from '@/store/type';
-import playIcon from '@/components/iconsCpns/playIcon.vue'
-import { useToPage } from '@/hooks/useToPage';
+import { getToplist } from "@/service/discoverMusic";
+import { ref } from "vue";
+import tCard from "@/components/baseUi/tCard.vue";
+import tGrid from "@/components/baseUi/tGrid.vue";
+import { getPlaylistAll } from "@/service/discoverMusic";
+import type { music } from "@/store/type";
+import playIcon from "@/components/iconsCpns/playIcon.vue";
+import { useToPage } from "@/hooks/useToPage";
 export interface topList {
-  coverImgUrl: string,
-  id: number,
-  updateTime: number
+  coverImgUrl: string;
+  id: number;
+  updateTime: number;
 }
 
-const topList = ref<topList[]>([])
+const topList = ref<topList[]>([]);
 
-const OfficialList = ref<music[][]>([])
+const OfficialList = ref<music[][]>([]);
 async function getOfficialList() {
-  const { list } = await getToplist()
-  topList.value = list
+  const { list } = await getToplist();
+  topList.value = list;
 
-
-  const data = await Promise.all([getPlaylistAll(topList.value[0].id), getPlaylistAll(topList.value[1].id), getPlaylistAll(topList.value[2].id), getPlaylistAll(topList.value[3].id)])
-  console.log(data);
+  const data = await Promise.all([
+    getPlaylistAll(topList.value[0].id),
+    getPlaylistAll(topList.value[1].id),
+    getPlaylistAll(topList.value[2].id),
+    getPlaylistAll(topList.value[3].id),
+  ]);
 
   data.forEach((item, index) => {
-    OfficialList.value[index] = item.songs
-  })
+    OfficialList.value[index] = item.songs;
+  });
 }
-await getOfficialList()
+await getOfficialList();
 
-const { handleMusiclistClick } = useToPage()
-
+const { handleMusiclistClick } = useToPage();
 </script>
 
 <template>
@@ -43,20 +45,28 @@ const { handleMusiclistClick } = useToPage()
           <div
             class="pic"
             @click="handleMusiclistClick(topList[i - 1].id)"
-            style="width: 200px;position: relative;"
+            style="width: 200px; position: relative"
           >
             <t-card :pic-url="topList[i - 1].coverImgUrl"></t-card>
             <play-icon class="icon"></play-icon>
           </div>
           <div class="lists">
             <template v-for="(musicInfo, index) in OfficialList[i - 1]">
-              <div class="list" v-if="index < 5" :class="index % 2 === 0 ? '' : 'special'">
-                <div class="songName" style="color:#d2d2d2;">
-                  <span :style="index > 2 ? '#666666' : 'color:#a63333'">{{ index }}</span>
-                  <span style="margin: 10px;">-</span>
+              <div
+                class="list"
+                v-if="index < 5"
+                :class="index % 2 === 0 ? '' : 'special'"
+              >
+                <div class="songName" style="color: #d2d2d2">
+                  <span :style="index > 2 ? '#666666' : 'color:#a63333'">{{
+                    index
+                  }}</span>
+                  <span style="margin: 10px">-</span>
                   {{ musicInfo.name }}
                 </div>
-                <div class="songAuther" style="color: #6c6c6c;">{{ musicInfo.ar[0].name }}</div>
+                <div class="songAuther" style="color: #6c6c6c">
+                  {{ musicInfo.ar[0].name }}
+                </div>
               </div>
             </template>
           </div>
@@ -66,12 +76,12 @@ const { handleMusiclistClick } = useToPage()
     <div>
       <div class="title">全球榜</div>
       <t-grid :columns="5" gap="20px">
-        <template v-for="item, index in topList">
+        <template v-for="(item, index) in topList">
           <div
             @click="handleMusiclistClick(item.id)"
             class="pic"
             v-if="index > 3"
-            style="position: relative;"
+            style="position: relative"
           >
             <t-card :pic-url="item.coverImgUrl"></t-card>
             <play-icon class="icon"></play-icon>

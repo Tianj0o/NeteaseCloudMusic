@@ -120,6 +120,8 @@ const handlePlayAll = () => {
       v-if="musicListdata"
       :musiclists="musicListdata"
     ></music-list>
+
+    <div class="loading" v-else></div>
   </div>
 </template>
 
@@ -169,6 +171,25 @@ const handlePlayAll = () => {
         font-weight: 900;
       }
     }
+  }
+}
+.loading {
+  margin-top: 30px;
+  margin: 0 auto;
+  height: 50px;
+  width: 50px;
+  border: 5px solid #fff;
+  border-bottom-color: #000000;
+  border-radius: 50%;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>
