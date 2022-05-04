@@ -87,9 +87,10 @@ const tGradConfig = {
 let isComplete = false;
 watchEffect(async () => {
   isComplete = true;
-  const data = await getArtistlist({ ...currentQueryConfig.value });
-  isComplete = false;
-  singerData.value = [...singerData.value, ...data.artists];
+  getArtistlist({ ...currentQueryConfig.value }).then(res => {
+    isComplete = false;
+    singerData.value = [...singerData.value, ...res.artists];
+  });
 });
 
 function handleGetData() {
@@ -143,57 +144,33 @@ const { scrollData } = useViScroll();
       <div class="container">
         <div class="area">
           <template v-for="item in areaList">
-            <span
-              class="item"
-              :class="{ active: item.value === currentQueryConfig.area }"
-              @click="handleItemClick(item, 'area')"
-              >{{ item.title }}</span
-            >
+            <span class="item" :class="{ active: item.value === currentQueryConfig.area }"
+              @click="handleItemClick(item, 'area')">{{ item.title }}</span>
           </template>
         </div>
         <div class="type">
           <template v-for="item in typeList">
-            <span
-              class="item"
-              :class="{ active: item.value === currentQueryConfig.type }"
-              @click="handleItemClick(item, 'type')"
-              >{{ item.title }}</span
-            >
+            <span class="item" :class="{ active: item.value === currentQueryConfig.type }"
+              @click="handleItemClick(item, 'type')">{{ item.title }}</span>
           </template>
         </div>
 
         <div class="initial">
           <template v-for="item in initialList">
-            <span
-              class="item"
-              :class="{
-                active:
-                  item === currentQueryConfig.initial ||
-                  (item === '热门' && currentQueryConfig.initial === '-1'),
-              }"
-              @click="handleItemClick(item)"
-              style="margin-bottom: 10px"
-              >{{ item }}</span
-            >
+            <span class="item" :class="{
+              active:
+                item === currentQueryConfig.initial ||
+                (item === '热门' && currentQueryConfig.initial === '-1'),
+            }" @click="handleItemClick(item)" style="margin-bottom: 10px">{{ item }}</span>
           </template>
         </div>
       </div>
     </div>
     <div class="container" ref="containerRef">
-      <v-scroll
-        :tGradConfig="tGradConfig"
-        :allData="singerData"
-        :scrollData="scrollData"
-        :singleHeight="singerHeight"
-        :fixScrollTop="instance"
-        @handleScrollTobottom="handleGetData"
-      >
+      <v-scroll :tGradConfig="tGradConfig" :allData="singerData" :scrollData="scrollData" :singleHeight="singerHeight"
+        :fixScrollTop="instance" @handleScrollTobottom="handleGetData">
         <template #default="defaultProps">
-          <tCard
-            :ref="setItemRef"
-            :pic-url="defaultProps.item.picUrl"
-            :name="defaultProps.item.name"
-          ></tCard>
+          <tCard :ref="setItemRef" :pic-url="defaultProps.item.picUrl" :name="defaultProps.item.name"></tCard>
         </template>
       </v-scroll>
     </div>

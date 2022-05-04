@@ -31,7 +31,7 @@ async function getOfficialList() {
     OfficialList.value[index] = item.songs;
   });
 }
-await getOfficialList();
+getOfficialList();
 
 const { handleMusiclistClick } = useToPage();
 </script>
